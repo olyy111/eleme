@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>eleme</title>
+   
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function (){
+            var viewportEl = document.createElement('meta'),
+                scale = 1/window.devicePixelRatio;
+
+            viewportEl.name = "viewport";
+            viewportEl.content = "width=device-width, initial-scale="+ scale +", maximum-scale="+ scale +", minimum-scale="+ scale +", user-scalable=no";
+            document.head.appendChild(viewportEl);
+
+            var h = window.innerWidth;
+            document.documentElement.style.fontSize = h/15 + 'px';
+        })
+    </script>
+
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
