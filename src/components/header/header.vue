@@ -16,11 +16,29 @@
                     {{seller.bulletin|wordsLengthLimit}}
                 </p>
             </div>
+            <div class="seller-detail-turn">
+                <i class="icon-keyboard_arrow_right"></i>
+            </div>
         </div>
-        <div class="activity-wrapper"></div>
+        <div class="activity-wrapper" :style="heightObj">
+            <div class="activity-info-wrapper">
+                <div class="activity-item" v-for="item in seller.supports">
+                    <span class="activity-item-icon" :class="[sureClass(item.type)]"></span>
+                    {{item.description}}
+                </div>
+            </div>
+            <span class="activity-count">
+                {{seller.supports&&seller.supports.length}}个活动
+                <i v-if="seller.supports&&seller.supports.length" 
+                    class="icon-keyboard_arrow_right"
+                    @click="flag"
+                ></i>
+            </span>
+        </div>
         <div class="bcg">
             <img :src="seller.avatar">
         </div>
+        
     </section>
 </template>
 <script>
@@ -30,17 +48,56 @@
         },
         data(){
             return {
-                
+                classMap: [],
+                isShowAllActivities: true,
+                height: ''
             }
         },
+        created() {
+                            
+        },
         methods: {
+            sureClass(typeNum){
+                var rsClass = ''
+                switch (typeNum) {
+                    case 0 :
+                        rsClass = "decrease_1"
+                        break
+                    case 1 :
+                        rsClass = "discount_1"
+                        break
+                    case 2 :
+                        rsClass = "special_1"
+                        break
+                    case 3 :
+                        rsClass = "invoice_1"
+                        break
+                    case 4 :
+                        rsClass = "guarantee_1"
+                        break
+                }
+                return rsClass
+            },
+            flag(){
+               this.isShowAllActivities = !this.isShowAllActivities
+            }
         },
         computed: {
+            heightObj(){
+                if(this.isShowAllActivities){
+                    this.height = ''
+                }else {
+                    this.height = this.seller.supports.length*54 + 'px'
+                }
+                return {
+                    height: this.height
+                }
+            }
         },
         filters: {
             wordsLengthLimit(words){
-                if(words&&words.length > 20){
-                    var limitWords = words.slice(0, 21) + "..."
+                if(words&&words.length > 18){
+                    var limitWords = words.slice(0, 19) + "..."
                 }
                 return limitWords || words
             }
@@ -49,9 +106,9 @@
 </script>
 <style lang="stylus">
     @import '../../common/css/tools.stylus'
+    @import '../../common/stylus/mixin'
     .hd 
         position: relative
-        height: 400px
         padding: 0 45px
         box-sizing: border-box
         color: #fff
@@ -61,11 +118,16 @@
     .turn
         padding: 39px 0
     .seller-info
+
+        position: relative
+        display: flex
+        flex-direction: row
+        justify-content: space-between
+        margin-bottom: 40px
         .title
             font-size: 48px
             line-height: 88px
         .avatar
-            float: left 
             width: 240px
             height: 240px
             margin-right: 47px
@@ -74,7 +136,7 @@
                 width: 100%
                 height: 100%
         .intro 
-            float: left  
+            margin-left: -30px  
         .des 
             font-size: 36px
             line-height: 44px   
@@ -82,6 +144,14 @@
         .notice 
             font-size: 36px
             line-height: 65px 
+        .seller-detail-turn
+            align-self: center
+            margin-top: -100px
+            i 
+                font-family: "sell-icon"
+
+             
+
     .bcg 
         position: absolute
         z-index: -1
@@ -93,6 +163,40 @@
         img
             width: 100%
             height: 100%
+    .activity-wrapper
+        height: 54px
+        display: flex
+        flex-direction: row
+        justify-content: space-between
+        padding-bottom: 8px
+        font-size: 32px
+        transition: 1s
+        .activity-item 
+            position:relative
+            line-height: 54px 
+            padding-left: 52px
+            .activity-item-icon
+                position: absolute
+                width: 39px
+                height: 39px
+                left: 0
+                top: 8px
+                &.decrease_1 
+                    bg-image("decrease_1")
+                &.discount_1 
+                    bg-image("discount_1")
+                &.invoice_1 
+                    bg-image("invoice_1")
+                &.special_1 
+                    bg-image("special_1")
+                &.guarantee_1 
+                    bg-image("guarantee_1")
             
+        .activity-count
+            .icon-keyboard_arrow_right
+                font-family: "sell-icon"
+                font-size: 40px
+        .hidden
+            overflow: hidden
     
 </style>

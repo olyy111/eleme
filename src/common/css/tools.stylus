@@ -6,3 +6,5 @@
     float: left
 .fr 
     float: right
+.hlight
+    color: #ff6000

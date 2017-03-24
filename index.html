@@ -6,6 +6,7 @@
    
     <link rel="stylesheet" href="/static/css/reset.css">
     <script>
+      //适配
         document.addEventListener('DOMContentLoaded', function (){
             var viewportEl = document.createElement('meta'),
                 scale = 1/window.devicePixelRatio;
@@ -16,6 +17,12 @@
 
             var h = window.innerWidth;
             document.documentElement.style.fontSize = h/15 + 'px';
+        })
+      //阻止浏览器默认行为
+        document.addEventListener('touchstart',function (ev){
+            ev.preventDefault()
+        }, {
+            passive: false
         })
     </script>
 
