@@ -1,8 +1,12 @@
 <template>
     <div class="goods">
-        <div class="sidebar-wrapper">
+        <div class="sidebar-wrapper" ref="sideWrapper">
             <ul class="sidebar">
-                <li class="item" v-for="item in resInfo.goods">
+                <li class="item" 
+                    v-for="(item, index) in resInfo.goods"
+                    :class="{active: activeIndex === index}"
+                    @click="dest(index, $event)"
+                >
                     <span class="item-text">
                         {{item.name}}
                     </span>
@@ -12,27 +16,136 @@
                 </li>
             </ul>
         </div>
-        <div class="goods-wrapper">
-            <div class="goods">
-
+        <div class="foods-wrapper" ref="foodsWrapper">
+            <div class="foods">
+                <div class="category-foods" v-for="item in goods">
+                    <div class="kind-top">
+                        <h5 class="kind-title">{{item.name}}</h5> 
+                        <!--<span class="kind-title-text">大家喜欢吃在叫真好吃</span>-->
+                    </div>
+                    <ul class="kind-list">
+                        <li class="kind-list-item" v-for="food in item.foods">
+                            <div class="food-avatar-wrap">
+                                <img :src="food.icon" class="img">
+                            </div>
+                            <div class="food-intro">
+                                <h5 class="food-name">{{food.name}}</h5>
+                                <p class="food-remark">{{food.description}}</p>
+                                <p class="food-addition">
+                                    月售{{food.sellCount}}份
+                                    好评率{{food.rating}}
+                                </p>
+                                <div class="price">
+                                    <strong class="price-new">
+                                        <span class="hlight sign">￥</span>
+                                        <span class="hlight num">{{food.price}}</span>
+                                    </strong>
+                                    
+                                    <strong class="price-old" v-if="food.oldPrice">
+                                        ￥{{food.price}}
+                                    </strong>
+                                </div>
+                                
+                            </div>
+                            <add-cart class="add-pos"></add-cart>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>   
     </div>
 </template>
 
 <script>
-export default {
-   props: {
-       resInfo: Object
-   }
-}
+    import add from "../add/add"
+    import iscroll from "iscroll" 
+    import BScroll from 'better-scroll'
+    import axios from 'axios'
+    export default {
+        props: {
+            resInfo: Object
+        },
+        created() {
+            this.$nextTick(() => {
+                axios.get('static/data.json').then((res) => {
+                    this.$nextTick(() => {
+                        this.initScroll()
+                        this.getSegTop()
+                    })
+                });
+           })
+        },
+        data(){
+            return {
+                segTopArr: [],
+                activeIndex: 0,
+                foodScroll: {},
+                isParMove: true
+            }
+        },
+        computed: {
+            goods(){
+                return this.resInfo.goods
+            }
+        },
+        components: {
+            "add-cart": add
+        },
+        methods: {
+             initScroll() {
+                this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
+                    click: true,
+                    probeType: 3,
+                    bounce: false
+                })
+                var sideScroll = new BScroll(this.$refs.sideWrapper, {
+                    click: true,
+                    probeType: 3
+                })
+                this.foodScroll.on('scroll', (pos) => {
+                    var currentY = Math.abs(pos.y),
+                        len = this.segTopArr.length,
+                        arr = this.segTopArr
+                    for(var i=0;i<len-1;i++){
+                        if(currentY>=arr[i]&&currentY<arr[i+1]){
+                            this.activeIndex = i
+                        }  
+                    }
+                    if(currentY === arr[len-1]){
+                        this.activeIndex = len-1
+                    }
+                })
+                this.$emit("scroll")
+              },
+              getSegTop(){
+                  var foods = document.getElementsByClassName("category-foods"),
+                      len = foods.length,
+                      top = 0
+                  this.segTopArr.push(top)  
+                  for(var i=0;i<len;i++){
+                      top += foods[i].clientHeight
+                      this.segTopArr.push(top)            
+                  }
+              },
+              dest(index, ev){
+                  if(!ev._constructed){
+                      return
+                  }
+                  var foods = document.getElementsByClassName("category-foods") 
+                  this.foodScroll.scrollToElement(foods[index], 300)
+              }
+        }
+    }
 </script>
 <style lang="stylus">
     .goods
+        height: 100%
         display: flex
         flex-direction: row
         .sidebar-wrapper
             width: 240px
+            height: 100%
+            overflow: hidden
             .item
                 position: relative
                 display: flex
@@ -53,6 +166,89 @@ export default {
                     text-align: center
                     border-radius: 18px
                     background-color: #ff461d
-        .goods-wrapper
-            flex-grow: 1
+            .active
+                border-color: #3190e8
+                background-color: #ffffff
+        .foods-wrapper
+            width: 1002px
+            height: 100%
+            overflow: hidden
+    .kind-list-item
+        display: flex
+        flex-direction: row
+        .img
+            width: 100%
+            height: 100%
+    .kind-top
+        display: flex
+        flex-direction: row
+        align-items: center
+        justify-content: flex-start
+        height: 78px
+        border-left: 9px solid #eeeeee
+        padding-left: 26px
+        background-color: #f8f8f8
+        .kind-title
+            margin-right: 15px
+            font-size: 40px
+            font-weight: bold
+            color: #666666
+        .kind-title-text
+            font-size: 34px
+            color: #999999
+    .kind-list-item
+        position: relative
+        padding: 42px 30px 18px 42px
+        .food-avatar-wrap
+            width: 171px
+            height: 171px
+            background: red
+            margin-right: 30px
+    .food-intro
+        flex-shrink: 1
+        .food-name
+            width: 545px
+            margin-bottom: 17px
+            font-size: 46px
+            line-height: 46px
+            color: #333333
+            font-weight: bold
+        .food-remark
+            width: 700px
+            line-height: 63px
+            font-size: 32px
+            color:#999999
+        .food-addition
+            line-height: 63px
+            font-size: 32px
+            color: #666666
+        .price
+            display: flex
+            position: relative
+            align-items: flex-end
+            margin-top: 8px
+            padding-bottom: 17px
+            height: 70px
+            box-sizing: border-box
+            .price-new
+                font-size: 0
+                margin-right: 10px
+                .sign
+                    font-size: 28px
+                    font-family: arial
+                    line-height: 40px
+                .num
+                    font-size: 50px
+                    font-family: arial
+                    font-weight: bold
+             .price-old
+                color: #dddddd
+                text-decoration: line-through
+                font-size: 36px
+                font-family: arial
+                line-height: 52px
+    .add-pos
+        position: absolute
+        right: 0
+        bottom: 0
 </style>
