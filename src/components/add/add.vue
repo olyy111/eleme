@@ -5,8 +5,10 @@
                 <span class="reduce icon-remove_circle_outline" @click="reduce"></span>
             </div>
         </transition>
-        <span class="counter">{{food.count}}</span>
-        <span class="plus icon-add_circle" @click="add"></span>
+        <span class="counter" v-show="food.count>0">{{food.count}}</span>
+        <div class="add-wrapper">
+            <span class="plus icon-add_circle" @click="add($event)"></span>
+        </div>
     </div>
 </template>
 <script>
@@ -20,27 +22,29 @@
             }
         },
         methods: {
-            // add(){
-            //     this.$store.commit('add', this.food)
-            // },
-            // reduce(){
-            //     this.$store.commit('reduce', this.food)
-            // }
-            add(){
-                if(!this.food.count){
-                    this.$set(this.food, 'count', 1)
-                }else {
-                    this.food.count ++
-                }
+            add(ev){
+                if(!ev._constructed) return
+                this.$store.commit('add', this.food)
+                this.$root.eventHub.$emit('cart.add', ev)
             },
             reduce(){
-                if(this.food.count){
-                    this.food.count --
-                    if(this.food.count === 0){
-                        delete this.food.count
-                    }
-                }
+                this.$store.commit('reduce', this.food)
             }
+            // add(){
+            //     if(!this.food.count){
+            //         this.$set(this.food, 'count', 1)
+            //     }else {
+            //         this.food.count ++
+            //     }
+            // },
+            // reduce(){
+            //     if(this.food.count){
+            //         this.food.count --
+            //         if(this.food.count === 0){
+            //             delete this.food.count
+            //         }
+            //     }
+            // }
         },
         computed: {
             
@@ -58,11 +62,13 @@
                 display: inline-block
                 padding: 20px
                 color: #3190e8
-        .plus
+        .add-wrapper
             display: inline-block
-            right: 0
-            color: #3190e8
-            padding: 20px
+            .plus
+                display: inline-block
+                right: 0
+                color: #3190e8
+                padding: 20px
         .counter
             display: inline-block
             font-size: 34px

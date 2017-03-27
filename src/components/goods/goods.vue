@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <shop-cart :resInfo="resInfo" :selectedFoods="selectedFoods" ></shop-cart>   
+        <shop-cart :resInfo="resInfo"></shop-cart>   
     </div>
 </template>
 
@@ -89,19 +89,19 @@
         computed: {
             goods(){
                 return this.resInfo.goods
-            },
-            selectedFoods(){
-                var goods = this.resInfo.goods
-                var arr = []
-                goods.forEach( good => {
-                    good.foods.forEach( food => {
-                        if(food.count > 0){
-                            arr.push(food)
-                        }
-                    })
-                })
-                return arr
             }
+            // selectedFoods(){
+            //     var goods = this.resInfo.goods
+            //     var arr = []
+            //     goods.forEach( good => {
+            //         good.foods.forEach( food => {
+            //             if(food.count > 0){
+            //                 arr.push(food)
+            //             }
+            //         })
+            //     })
+            //     return arr
+            // }
         },
         components: {
             "add-cart": add,

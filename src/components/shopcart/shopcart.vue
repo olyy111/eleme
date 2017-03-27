@@ -5,8 +5,9 @@
         <div class="content-left" >
           <div class="logo-wrapper">
             <div class="badge" v-if="totalPrice !== 0">
+              {{foodsNum}}
             </div>
-            <div class="logo">
+            <div class="logo" :class="{active: totalPrice>0}">
               <i class="icon-shopping_cart"></i>
             </div>
           </div>
@@ -22,15 +23,21 @@
             </div>
           </div>
         </div>
-        <div class="content-right">
+        <div class="content-right" :class="{enough:totalPrice>(resInfo.seller&&resInfo.seller.minPrice)}">
           {{shipfeeTips}}           
         </div>
       </div>
       <div class="ball-container">
       
-          <div class="ball" v-show="">
-            <div class="inner inner-hook"></div>
-          </div>
+          <transition name="drop" v-for="ball in balls" 
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @after-enter="afterEnter"
+          >
+            <div class="ball" v-show="ball.show">
+              <div class="inner inner-hook"></div>
+            </div>
+          </transition>
         
       </div>
     
@@ -61,8 +68,8 @@
 </template>
 
 <script>
-
-
+  import { mapState } from 'vuex'
+  import { mapGetters } from 'vuex'
   export default {
     props: {
       resInfo: {
@@ -70,22 +77,97 @@
         default(){
           return {}
         }
-      },
-      selectedFoods: {
-        type: Array,
-        default(){
-          return []
-        }
       }
     },
+    data(){
+        return {
+          balls: [
+            {
+              show: false
+            },
+            {
+              show: false
+            },
+            {
+              show: false
+            },
+            {
+              show: false
+            },
+            {
+              show: false
+            },
+          ],
+          dropBalls: []
+        }
+    },
+    created(){
+      this.$root.eventHub.$on('cart.add', (ev) => {
+        this.drop(ev.target)
+      })
+      
+    },
+    methods: {
+      drop(el){
+         var balls = document.getElementsByClassName("ball");
+         for(var i = 0, l = this.balls.length; i < this.balls.length; i++){
+           if(this.balls[i].show === false){
+             this.balls[i].show = true
+             this.balls[i].el = el
+             this.dropBalls.push(this.balls[i])
+             return
+           }
+         } 
+      },
+      beforeEnter(el){
+          for( var i=0;i<this.balls.length;i++){
+            if(this.balls[i].show){
+              var rect = this.balls[i].el.parentNode.getBoundingClientRect(),
+                  x = rect.left - 73 ,
+                  y = window.innerHeight - rect.top - 171
+                  console.log(this.balls[i].el.parentNode)
+              el.style.display = ''
+              el.style.transform = `translate3d(${x}px, 0, 0)`
+              el.style.webkitTransform = `translate3d(${x}px, 0, 0)`
+              var child = el.querySelector('.inner-hook')
+              child.style.transform = `translate3d(0, ${-y}px, 0)`
+              child.style.webkitTransform = `translate3d(0, ${-y}px, 0)`
+              console.log(child)
+            }
+          }
+      },
+      enter(el){
+        el.offsetHeight
+        this.$nextTick(() => {
+          el.style.transform = 'translate3d(0, 0, 0)'
+          el.style.webkitTransform = 'translate3d(0, 0, 0)'
+          var child = el.querySelector('.inner-hook')
+          child.style.transform = 'translate3d(0, 0, 0)'
+          child.style.webkitTransform = 'translate3d(0, 0, 0)'
+        })
+      },
+      afterEnter(el) {
+        let ball = this.dropBalls.shift()
+        if (ball) {
+          ball.show = false
+          el.style.display = 'none'
+        }
+      }
+
+    },
     computed: {
+      ...mapState({
+        selectedFoods: 'products',
+        
+      }),
+      ...mapGetters({
+        foodsNum: 'foodsNum'
+      }),
       totalPrice(){
         var foods = this.selectedFoods,
             price = 0
-            console.log(this.selectedFoods)
         foods.forEach( item => {
           price += item.count*item.price
-          console.log(price)
         })
         return price
       },
@@ -97,7 +179,6 @@
             minPrice = this.resInfo.seller&&this.resInfo.seller.minPrice
         foods.forEach( item => {
           price += item.count*item.price
-          console.log(price)
         })
         if(price === 0){
           words = minPrice + '元起送'
@@ -109,8 +190,6 @@
         }
         return words
       }
-    },
-    methods: {
       
     }
 
@@ -152,10 +231,10 @@
           right 0
           background: rgb(240,20,20);
           color: white;
-          width 66px
+          width 44px
           height 36px
           line-height: 36px;
-          font-size: 266px;
+          font-size: 30px;
           box-shadow: 0px 6px 10px 0px rgba(0,0,0,0.4);
           font-weight: 700;
           border-radius: 16px;
@@ -167,10 +246,10 @@
           border-radius: 50%
           font-size: 84px
           color: #80858a
-          line-height: 140px
+          line-height: 160px
           font-weight: 700
           &.active
-            background: rgb(0,160,220);
+            background: #3190e8;
             color: white;
       .cart-empty
         display: inline-block
@@ -210,17 +289,19 @@
   .ball-container
     .ball
       position fixed
-      left 32px
-      bottom 22px
+      left 123px
+      bottom 91px
+      width 80px
+      height 80px
       z-index 200
       &.drop-enter,&.drop-enter-active
-        transition all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
+        transition all .4s linear
         .inner
-          width 16px
-          height 16px
+          width 40px
+          height 40px
           border-radius 50%
           background rgb(0,160,220)
-          transition all 0.4s linear
+          transition all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
   .shopcart-list
     position absolute
     top 0

@@ -31,11 +31,15 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import axios from 'axios'
 import header from "./components/header/header"
 import goods from "./components/goods/goods"
 import comments from "./components/comments/comments"
 import BScroll from "better-scroll"
+
+var eventHub = new Vue();
+console.log(eventHub)
 export default {
   name: 'app',
   data(){
@@ -43,7 +47,8 @@ export default {
         //数据还没来的时候子组件就渲染进去了，来了数据又更新视图
         //如果值是null 在子组件用的时候就会报错
           seller: {},
-          resInfo: {}
+          resInfo: {},
+          eventHub: eventHub
       }
   },
   created(){
@@ -56,7 +61,6 @@ export default {
   },
   methods: {
       initScroll(){
-          console.log(111)
       }
   },
   components: {
