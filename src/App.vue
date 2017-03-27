@@ -74,6 +74,7 @@ export default {
         position: relative
         height: 100%
         overflow: hidden
+        font-family: Helvetica 
     .eleme-nav 
         display: flex;
         flex-direction: row

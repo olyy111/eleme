@@ -47,12 +47,13 @@
                                 </div>
                                 
                             </div>
-                            <add-cart class="add-pos"></add-cart>
+                            <add-cart class="add-pos" :food="food"></add-cart>
                         </li>
                     </ul>
                 </div>
             </div>
-        </div>   
+        </div>
+        <shop-cart :resInfo="resInfo" :selectedFoods="selectedFoods" ></shop-cart>   
     </div>
 </template>
 
@@ -61,6 +62,7 @@
     import iscroll from "iscroll" 
     import BScroll from 'better-scroll'
     import axios from 'axios'
+    import shopcart from '../shopcart/shopcart'
     export default {
         props: {
             resInfo: Object
@@ -80,16 +82,30 @@
                 segTopArr: [],
                 activeIndex: 0,
                 foodScroll: {},
-                isParMove: true
+                isParMove: true,
+
             }
         },
         computed: {
             goods(){
                 return this.resInfo.goods
+            },
+            selectedFoods(){
+                var goods = this.resInfo.goods
+                var arr = []
+                goods.forEach( good => {
+                    good.foods.forEach( food => {
+                        if(food.count > 0){
+                            arr.push(food)
+                        }
+                    })
+                })
+                return arr
             }
         },
         components: {
-            "add-cart": add
+            "add-cart": add,
+            "shop-cart": shopcart
         },
         methods: {
              initScroll() {
@@ -198,7 +214,7 @@
             color: #999999
     .kind-list-item
         position: relative
-        padding: 42px 30px 18px 42px
+        padding: 42px 30px 0 42px
         .food-avatar-wrap
             width: 171px
             height: 171px
