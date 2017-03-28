@@ -1,8 +1,8 @@
 <template lang="html">
-  <div class="">
+  <div class="shop-cart-wrapper">
     <div class="shopCart">
       <div class="content">
-        <div class="content-left" >
+        <div class="content-left"  @click.stop="toggleList">
           <div class="logo-wrapper">
             <div class="badge" v-if="totalPrice !== 0">
               {{foodsNum}}
@@ -23,7 +23,9 @@
             </div>
           </div>
         </div>
-        <div class="content-right" :class="{enough:totalPrice>(resInfo.seller&&resInfo.seller.minPrice)}">
+        <div class="content-right" 
+          :class="{enough:totalPrice>(resInfo.seller&&resInfo.seller.minPrice)}"
+        >
           {{shipfeeTips}}           
         </div>
       </div>
@@ -40,29 +42,40 @@
           </transition>
         
       </div>
-    
-      <div class="shopcart-list" v-show="">
-        <div class="list-header">
-          <h1 class="title">购物车</h1>
-          <span class="empty" >清空</span>
+      <transition name="fold">
+        <div class="shopcart-list" v-show="isFold">
+          <div class="list-header">
+            <h1 class="title">购物车</h1>
+            <span class="empty" @click="clear">清空</span>
+          </div>
+          <div class="list-content" ref="shopCartList">
+            <ul>
+              <transition-group
+                name="cartList"
+                @before-leave="beforeLeave"
+                @leave="leave"
+                @after-leave="afterLeave"
+              >
+                <li class="food" v-for="food in selectedFoods" :key="food">
+                  <span class="name">{{food.name}}</span>
+                  <div class="price">
+                    <span class="hlight">￥</span>
+                    <span>{{food.price}}</span>
+                  </div>
+                  <div class="cartcontrol-wrapper">
+                    <add-cart :food="food"></add-cart>
+                  </div>
+                </li>
+              </transition-group>
+            </ul>
+          </div>
         </div>
-        <div class="list-content" ref="">
-          <ul>
-            <li class="food" v-for="">
-              <span class="name"></span>
-              <div class="price">
-                <span></span>
-              </div>
-              <div class="cartcontrol-wrapper">
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-      
+      </transition>
     </div>
+    <transition>
+      <div class="backdrop" v-show="isFold" @click="toggleBackdrop"></div>
+    </transition>
     
-    <div class="backdrop" v-show=""></div>
   
   </div>
 </template>
@@ -70,6 +83,10 @@
 <script>
   import { mapState } from 'vuex'
   import { mapGetters } from 'vuex'
+  import {mapMutations} from 'vuex'
+  import addcart from '../add/add'
+  import BScroll from 'better-scroll'
+  import Velocity from 'velocity-animate'
   export default {
     props: {
       resInfo: {
@@ -98,16 +115,62 @@
               show: false
             },
           ],
-          dropBalls: []
+          dropBalls: [],
+          isFold: false
         }
     },
     created(){
       this.$root.eventHub.$on('cart.add', (ev) => {
         this.drop(ev.target)
       })
+
+      
+      this.$nextTick(() => {
+
+        //因为首页去除整个浏览器默认行为， 导致点击无效，这里阻止冒泡
+        var shopcart = document.getElementsByClassName('shop-cart-wrapper')[0];
+        shopcart.addEventListener('touchstart', function (ev){
+          ev.stopPropagation()
+        })
+
+        var cartList = new BScroll(this.$refs.shopCartList, {
+          click: true
+        })
+        console.log(cartList)
+      })
       
     },
     methods: {
+      beforeLeave(el){
+        el.style['box-shadow'] = 'inset 0px 1px 42px #333'
+      },
+      leave(el, done){
+        Velocity(el, 
+        { height: 0 }, 
+        { 
+          duration: 300,
+          complete: done
+        }
+        )
+      },
+      afterLeave(el){
+        console.log(this.selectedFoods.length)
+        if(this.selectedFoods.length === 0){
+          this.isFold = false
+        }
+      },
+      clear(){
+        this.isFold = false
+      },
+      toggleList(){
+        if(!this.totalPrice){
+          return
+        }
+        this.isFold = !this.isFold
+      },
+      toggleBackdrop(){
+        this.isFold = !this.isFold
+      },
       drop(el){
          var balls = document.getElementsByClassName("ball");
          for(var i = 0, l = this.balls.length; i < this.balls.length; i++){
@@ -125,14 +188,12 @@
               var rect = this.balls[i].el.parentNode.getBoundingClientRect(),
                   x = rect.left - 73 ,
                   y = window.innerHeight - rect.top - 171
-                  console.log(this.balls[i].el.parentNode)
               el.style.display = ''
               el.style.transform = `translate3d(${x}px, 0, 0)`
               el.style.webkitTransform = `translate3d(${x}px, 0, 0)`
               var child = el.querySelector('.inner-hook')
               child.style.transform = `translate3d(0, ${-y}px, 0)`
               child.style.webkitTransform = `translate3d(0, ${-y}px, 0)`
-              console.log(child)
             }
           }
       },
@@ -172,25 +233,28 @@
         return price
       },
       shipfeeTips(){
-          
+
         var foods = this.selectedFoods,
             price = 0,
             words = '',
-            minPrice = this.resInfo.seller&&this.resInfo.seller.minPrice
+            minPrice = this.resInfo.seller&&this.resInfo.seller.minPrice || ''
         foods.forEach( item => {
           price += item.count*item.price
         })
         if(price === 0){
           words = minPrice + '元起送'
         }else if (price < minPrice) {
-          
+
           words = '还差￥' + (minPrice-price) + '起送'
         }else {
           words = '结算'
-        }
-        return words
+        }             
+        return words    
       }
       
+    },
+    components: {
+      'add-cart': addcart
     }
 
   }
@@ -200,12 +264,15 @@
 <style lang="stylus" scoped>
 .shopCart
   position fixed
+  z-index 50
   left 0
   bottom 0
   width 100%
   height 144px
-  z-index 50
+  
   .content
+    position relative
+    z-index 30
     display flex
     background rgba(20, 29, 39, .9)
     .content-left
@@ -304,57 +371,61 @@
           transition all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
   .shopcart-list
     position absolute
-    top 0
+    z-index 10
+    bottom 144px
     left 0
     width 100%
     background white
-    transform translate3d(0,-100%,0)
-    z-index -1
-    &.transHeight-enter-active,&.transHeight-leave-active
-      transition all 0.5s
-    &.transHeight-enter,&.transHeight-leave-active
-      transform translate3d(0,0,0)
+    transition: .3s linear
+    &.fold-enter, &.fold-leave-active {
+      transform: translate3d(0, 100%, 0)
+    }
     .list-header
-      height 40px
-      line-height 40px
-      background #f3f5f7
-      border-bottom 1px solid rgba(7,17,27,0.1)
+      height 120px
+      background #ececee
       .title
         display inline-block
-        font-size 14px
-        font-weight 200
-        color rgb(7,17,27)
-        padding-left 18px
+        font-size 46px
+        font-weight 700
+        color #666666
+        margin-left 60px
+        padding-left 24px
+        border-left 9px solid #0096ff
       .empty
         position absolute
         right 8px
-        font-size 12px
-        color rgb(0,160,220)
-        padding 0 10px
+        top 30px
+        font-size 40px
+        color #666666
+        padding 0 75px
     .list-content
-      max-height 217px
+      max-height 1200px
       overflow hidden
       .food
         position relative
         display flex
-        height 48px
-        margin 0 18px
+        height 160px
+        padding 0 60px
         border-bottom 1px solid rgba(7,17,27,0.1)
+        overflow hidden
         .name
           flex 1
-          font-size 14px
-          color rgb(7,17,27)
-          line-height 48px
+          font-size 48px
+          color #000000
+          line-height 162px
           font-weight 700
         .price
-          font-size 14px
+          font-size 52px
           font-weight 700
-          color rgb(240,20,20)
-          padding 0 12px 0 18px
-          line-height 48px
+          color #ff6000
+          padding 0 32px 0 38px
+          line-height 160px
+          .hlight
+            font-size 42px
+            margin-right -20px
         .cartcontrol-wrapper
-          font-size 14px
-          margin-top 6px
+          font-size 70px
+          margin-top 25px
 .backdrop
   position fixed
   top 0
@@ -364,8 +435,6 @@
   background rgba(7,17,27,0.6)
   backdrop-filter blur(10px)
   z-index 40
-  &.fade-backdrop-enter-active,&.fade-backdrop-leave-active
-    transition opacity 0.5s
-  &.fade-backdrop-enter,&.fade-backdrop-leave-active
-    opacity 0
+
+
 </style>

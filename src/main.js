@@ -21,7 +21,6 @@ var store = new Vuex.Store({
   },
   mutations: {
       add(state, food){
-        
           var product = state.products.find( product => product === food)
           if(!product){
             product = food
@@ -32,14 +31,17 @@ var store = new Vuex.Store({
           }
       },
       reduce(state, food){
-          var product = state.products.find( product => product === food)
-          if(product){
-              product.count --
-              if(product.count === 0){
-                  var index = state.products.findIndex( product => product === food)
-                  state.products.splice(index, 1)
-              }
-          }
+        var product = state.products.find( product => product === food)
+        if(product){
+            product.count --
+            if(product.count === 0){
+                var index = state.products.findIndex( product => product === food)
+                state.products.splice(index, 1)
+            }
+        }
+      },
+      clear(state){
+        state.products = []
       }
   }
 

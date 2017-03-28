@@ -90,18 +90,6 @@
             goods(){
                 return this.resInfo.goods
             }
-            // selectedFoods(){
-            //     var goods = this.resInfo.goods
-            //     var arr = []
-            //     goods.forEach( good => {
-            //         good.foods.forEach( food => {
-            //             if(food.count > 0){
-            //                 arr.push(food)
-            //             }
-            //         })
-            //     })
-            //     return arr
-            // }
         },
         components: {
             "add-cart": add,

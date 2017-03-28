@@ -30,21 +30,6 @@
             reduce(){
                 this.$store.commit('reduce', this.food)
             }
-            // add(){
-            //     if(!this.food.count){
-            //         this.$set(this.food, 'count', 1)
-            //     }else {
-            //         this.food.count ++
-            //     }
-            // },
-            // reduce(){
-            //     if(this.food.count){
-            //         this.food.count --
-            //         if(this.food.count === 0){
-            //             delete this.food.count
-            //         }
-            //     }
-            // }
         },
         computed: {
             
@@ -54,7 +39,7 @@
 </script>
 <style lang="stylus" scoped>
     .add-cart
-        diaplay: flex
+        display: flex
         align-items: center
         .reduce-wrapper
             display: inline-block
