@@ -118,7 +118,6 @@
     .turn
         padding: 39px 0
     .seller-info
-
         position: relative
         display: flex
         flex-direction: row
@@ -135,6 +134,7 @@
             img 
                 width: 100%
                 height: 100%
+                border-radius: 10px
         .intro 
             margin-left: -30px  
         .des 
@@ -195,9 +195,14 @@
                     bg-image("guarantee_1")
             
         .activity-count
+            padding: 40px 0 0 40px
+            margin: -40px 0 0 -40px
             .icon-keyboard_arrow_right
+                display: inline-block
                 font-family: "sell-icon"
                 font-size: 40px
+                vertical-align: top
+                
         .hidden
             overflow: hidden
     

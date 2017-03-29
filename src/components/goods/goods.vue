@@ -1,7 +1,7 @@
 <template>
     <div class="goods">
         <div class="sidebar-wrapper" ref="sideWrapper">
-            <ul class="sidebar">
+            <ul class="sidebar" ref="sideBar">
                 <li class="item" 
                     v-for="(item, index) in resInfo.goods"
                     :class="{active: activeIndex === index}"
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <shop-cart :resInfo="resInfo"></shop-cart>   
+        <shop-cart :resInfo="resInfo" ref="shopCart"></shop-cart>   
     </div>
 </template>
 
@@ -73,6 +73,7 @@
                     this.$nextTick(() => {
                         this.initScroll()
                         this.getSegTop()
+                        this.computedSideBarSize()
                     })
                 });
            })
@@ -84,8 +85,13 @@
                 foodScroll: {},
                 sideScroll: {},
                 isParMove: true,
-                sideNotMove: false
-
+                sideEl: {
+                    wrapperHeight: 0,
+                    innerHeight: 0,
+                    showHeight: 0,
+                    min:0
+                },
+                sideNotMove: false //如果是点击sidebar的区块， 不会自动校正位置
             }
         },
         computed: {
@@ -102,37 +108,33 @@
                 if(this.sideNotMove){
                     return
                 }
-                var currentSideEl = document.querySelectorAll('.sidebar .item')[this.activeIndex]
-                var currentSideElTop = currentSideEl.offsetTop
-                var currentSideElHeight = currentSideEl.offsetHeight
-                var sideBarHeight = document.querySelector('.sidebar-wrapper').clientHeight
-                var sideInnerHeight = document.querySelector('.sidebar').clientHeight
-                var shopCartHeight = document.querySelector('.shopCart').clientHeight
-                
-                var sideBarShowHeight = sideBarHeight-shopCartHeight
-                var destTop = (sideBarShowHeight-currentSideElHeight)/2
-                var h = 0
+                //计算sidebar区块居中
+                var currentSideEl = this.$refs.sideBar.querySelectorAll('.sidebar .item')[this.activeIndex],
+                    currentSideElHeight = currentSideEl.offsetHeight,
+                    destTop = (this.sideEl.showHeight-currentSideElHeight)/2,
+                    h = 0,
+                    move = 0
                 for(var i=0;i<this.activeIndex; i++){
-                    var nowEl = document.querySelectorAll('.sidebar .item')[i]
-                    h += nowEl.offsetHeight
+                    h += this.$refs.sideBar.querySelectorAll('.item')[i].offsetHeight
                 }
-                console.log(sideBarShowHeight)
-                var move = h - destTop
-                var min = sideInnerHeight - sideBarHeight
-
-                if(move > 0 && move< min){
-                    if(move + currentSideElHeight > min){
-                        move = min
-                    }
+                move = h - destTop
+                if(move > 0 && move<this.min){
+                    if(move + currentSideElHeight >this.min){
+                        move = this.min                    }
                     if( move - currentSideElHeight < 0){
                         move = 0
                     }
                     this.sideScroll.scrollTo(0, -move, 800)
                 }
-                
             }
         },
         methods: {
+             computedSideBarSize(){
+                this.sideEl.wrapperHeight = this.$refs.sideWrapper.clientHeight
+                this.sideEl.innerHeight = this.$refs.sideBar.clientHeight
+                this.sideEl.showHeight = this.sideEl.wrapperHeight - this.$refs.shopCart.$el.clientHeight
+                this.min = this.sideEl.innerHeight - this.sideEl.wrapperHeight
+             },
              initScroll() {
                 this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
                     click: true,

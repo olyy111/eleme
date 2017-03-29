@@ -260,14 +260,17 @@
 </script>
 
 <style lang="stylus" scoped>
+.shop-cart-wrapper
+  position: fixed;
+  z-index: 50;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 144px;
 .shopCart
-  position fixed
+  position relative
   z-index 50
-  left 0
-  bottom 0
-  width 100%
-  height 144px
-  
+  height 100%
   .content
     position relative
     z-index 30
