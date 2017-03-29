@@ -84,6 +84,7 @@
                 foodScroll: {},
                 sideScroll: {},
                 isParMove: true,
+                sideNotMove: false
 
             }
         },
@@ -98,30 +99,34 @@
         },
         watch: {
             activeIndex() {
+                if(this.sideNotMove){
+                    return
+                }
                 var currentSideEl = document.querySelectorAll('.sidebar .item')[this.activeIndex]
                 var currentSideElTop = currentSideEl.offsetTop
                 var currentSideElHeight = currentSideEl.offsetHeight
                 var sideBarHeight = document.querySelector('.sidebar-wrapper').clientHeight
-                
+                var sideInnerHeight = document.querySelector('.sidebar').clientHeight
                 var shopCartHeight = document.querySelector('.shopCart').clientHeight
                 
                 var sideBarShowHeight = sideBarHeight-shopCartHeight
                 var destTop = (sideBarShowHeight-currentSideElHeight)/2
-                console.log(destTop)
                 var h = 0
-                var totalH = 0
                 for(var i=0;i<this.activeIndex; i++){
-                    var nowEl = document.querySelectorAll('.sidebar .item')[this.activeIndex]
-                    h += nowEl.offsetHeight
-
-                }
-                for(var i=0;i<this.resInfo.goods.length;i++){
                     var nowEl = document.querySelectorAll('.sidebar .item')[i]
-                    totalH += nowEl.offsetHeight
+                    h += nowEl.offsetHeight
                 }
+                console.log(sideBarShowHeight)
                 var move = h - destTop
-                var min = totalH - sideBarShowHeight+144
+                var min = sideInnerHeight - sideBarHeight
+
                 if(move > 0 && move< min){
+                    if(move + currentSideElHeight > min){
+                        move = min
+                    }
+                    if( move - currentSideElHeight < 0){
+                        move = 0
+                    }
                     this.sideScroll.scrollTo(0, -move, 800)
                 }
                 
@@ -151,6 +156,9 @@
                         this.activeIndex = len-1
                     }
                 })
+                this.foodScroll.on('scrollStart', (pos) => {
+                    this.sideNotMove = false
+                })
               },
               getSegTop(){
                   var foods = document.getElementsByClassName("category-foods"),
@@ -166,6 +174,7 @@
                   if(!ev._constructed){
                       return
                   }
+                  this.sideNotMove = true
                   var foods = document.getElementsByClassName("category-foods") 
                   this.foodScroll.scrollToElement(foods[index], 300)
               }

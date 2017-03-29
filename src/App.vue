@@ -39,7 +39,6 @@ import comments from "./components/comments/comments"
 import BScroll from "better-scroll"
 
 var eventHub = new Vue();
-console.log(eventHub)
 export default {
   name: 'app',
   data(){

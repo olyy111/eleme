@@ -136,7 +136,6 @@
         var cartList = new BScroll(this.$refs.shopCartList, {
           click: true
         })
-        console.log(cartList)
       })
       
     },
@@ -154,7 +153,6 @@
         )
       },
       afterLeave(el){
-        console.log(this.selectedFoods.length)
         if(this.selectedFoods.length === 0){
           this.isFold = false
         }
