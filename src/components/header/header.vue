@@ -181,6 +181,8 @@
                 height: 39px
                 left: 0
                 top: 8px
+                background-size: 100% 100%
+                border-radius: 5px
                 &.decrease_1 
                     bg-image("decrease_1")
                 &.discount_1 

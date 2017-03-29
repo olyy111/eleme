@@ -82,6 +82,7 @@
                 segTopArr: [],
                 activeIndex: 0,
                 foodScroll: {},
+                sideScroll: {},
                 isParMove: true,
 
             }
@@ -95,6 +96,37 @@
             "add-cart": add,
             "shop-cart": shopcart
         },
+        watch: {
+            activeIndex() {
+                var currentSideEl = document.querySelectorAll('.sidebar .item')[this.activeIndex]
+                var currentSideElTop = currentSideEl.offsetTop
+                var currentSideElHeight = currentSideEl.offsetHeight
+                var sideBarHeight = document.querySelector('.sidebar-wrapper').clientHeight
+                
+                var shopCartHeight = document.querySelector('.shopCart').clientHeight
+                
+                var sideBarShowHeight = sideBarHeight-shopCartHeight
+                var destTop = (sideBarShowHeight-currentSideElHeight)/2
+                console.log(destTop)
+                var h = 0
+                var totalH = 0
+                for(var i=0;i<this.activeIndex; i++){
+                    var nowEl = document.querySelectorAll('.sidebar .item')[this.activeIndex]
+                    h += nowEl.offsetHeight
+
+                }
+                for(var i=0;i<this.resInfo.goods.length;i++){
+                    var nowEl = document.querySelectorAll('.sidebar .item')[i]
+                    totalH += nowEl.offsetHeight
+                }
+                var move = h - destTop
+                var min = totalH - sideBarShowHeight+144
+                if(move > 0 && move< min){
+                    this.sideScroll.scrollTo(0, -move, 800)
+                }
+                
+            }
+        },
         methods: {
              initScroll() {
                 this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
@@ -102,7 +134,7 @@
                     probeType: 3,
                     bounce: false
                 })
-                var sideScroll = new BScroll(this.$refs.sideWrapper, {
+                this.sideScroll = new BScroll(this.$refs.sideWrapper, {
                     click: true,
                     probeType: 3
                 })
@@ -119,7 +151,6 @@
                         this.activeIndex = len-1
                     }
                 })
-                this.$emit("scroll")
               },
               getSegTop(){
                   var foods = document.getElementsByClassName("category-foods"),
@@ -150,12 +181,15 @@
             width: 240px
             height: 100%
             overflow: hidden
+            .sidebar
+                padding-bottom: 144px
             .item
                 position: relative
                 display: flex
                 border-left: 10px solid #f8f8f8
                 padding: 60px 0 60px 32px
                 background-color: #f8f8f8 
+                border-bottom: 1px solid #eaeaea
                 .item-text
                     font-size: 40px
                 .item-count
@@ -171,7 +205,7 @@
                     border-radius: 18px
                     background-color: #ff461d
             .active
-                border-color: #3190e8
+                border-left: 10px solid #3190e8
                 background-color: #ffffff
         .foods-wrapper
             width: 1002px

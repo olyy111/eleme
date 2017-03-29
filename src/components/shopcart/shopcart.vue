@@ -72,7 +72,7 @@
         </div>
       </transition>
     </div>
-    <transition>
+    <transition name="backdrop">
       <div class="backdrop" v-show="isFold" @click="toggleBackdrop"></div>
     </transition>
     
@@ -433,8 +433,10 @@
   left 0
   right 0
   background rgba(7,17,27,0.6)
-  backdrop-filter blur(10px)
   z-index 40
-
-
+  transition all .3s linear
+  &.backdrop-enter, &.backdrop-leave-active
+    opacity 0
+  &.backdrop-enter-active
+    opacity 1
 </style>
