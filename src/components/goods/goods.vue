@@ -24,7 +24,12 @@
                         <!--<span class="kind-title-text">大家喜欢吃在叫真好吃</span>-->
                     </div>
                     <ul class="kind-list">
-                        <li class="kind-list-item" v-for="food in item.foods">
+                        <li class="kind-list-item" 
+                            v-for="(food, index) in item.foods"
+                            @click="show"
+                             ref="test"
+                        >
+                        
                             <div class="food-avatar-wrap">
                                 <img :src="food.icon" class="img">
                             </div>
@@ -47,13 +52,28 @@
                                 </div>
                                 
                             </div>
+                            <div class="layout-click" @touchend="showFood($event, food)"></div>
                             <add-cart class="add-pos" :food="food"></add-cart>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <shop-cart :resInfo="resInfo" ref="shopCart"></shop-cart>   
+        <shop-cart :resInfo="resInfo" ref="shopCart"></shop-cart>  
+        <transition name="maskFood">
+            <div class="food-wrapper" v-show="isFoodShow" >
+                <div class="mask"
+                    
+                ></div>
+                <div class="food-profile" @click="notFoodShow($event)">
+                    <!--<food></food>-->
+                </div>
+            </div>
+        </transition> 
+            
+        </div> 
+        
+        
     </div>
 </template>
 
@@ -63,6 +83,7 @@
     import BScroll from 'better-scroll'
     import axios from 'axios'
     import shopcart from '../shopcart/shopcart'
+    import food from '../food/food'
     export default {
         props: {
             resInfo: Object
@@ -71,7 +92,7 @@
             this.$nextTick(() => {
                 axios.get('static/data.json').then((res) => {
                     this.$nextTick(() => {
-                        this.initScroll()
+                        this._initScroll()
                         this.getSegTop()
                         this.computedSideBarSize()
                     })
@@ -85,6 +106,7 @@
                 foodScroll: {},
                 sideScroll: {},
                 isParMove: true,
+                isFoodShow: false,
                 sideEl: {
                     wrapperHeight: 0,
                     innerHeight: 0,
@@ -101,7 +123,8 @@
         },
         components: {
             "add-cart": add,
-            "shop-cart": shopcart
+            "shop-cart": shopcart,
+            "food": food
         },
         watch: {
             activeIndex() {
@@ -129,13 +152,22 @@
             }
         },
         methods: {
-             computedSideBarSize(){
+            show(){
+            },
+            showFood(ev, food){
+                this.isFoodShow = true
+                this.$root.eventHub.$emit('foodEv', ev.target, food)
+            },
+            notFoodShow(ev){
+                this.isFoodShow = false
+            },
+            computedSideBarSize(){
                 this.sideEl.wrapperHeight = this.$refs.sideWrapper.clientHeight
                 this.sideEl.innerHeight = this.$refs.sideBar.clientHeight
                 this.sideEl.showHeight = this.sideEl.wrapperHeight - this.$refs.shopCart.$el.clientHeight
                 this.min = this.sideEl.innerHeight - this.sideEl.wrapperHeight
-             },
-             initScroll() {
+            },
+            _initScroll() {
                 this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
                     click: true,
                     probeType: 3,
@@ -161,25 +193,25 @@
                 this.foodScroll.on('scrollStart', (pos) => {
                     this.sideNotMove = false
                 })
-              },
-              getSegTop(){
-                  var foods = document.getElementsByClassName("category-foods"),
-                      len = foods.length,
-                      top = 0
-                  this.segTopArr.push(top)  
-                  for(var i=0;i<len;i++){
-                      top += foods[i].clientHeight
-                      this.segTopArr.push(top)            
-                  }
-              },
-              dest(index, ev){
-                  if(!ev._constructed){
-                      return
-                  }
-                  this.sideNotMove = true
-                  var foods = document.getElementsByClassName("category-foods") 
-                  this.foodScroll.scrollToElement(foods[index], 300)
-              }
+            },
+            getSegTop(){
+                var foods = document.getElementsByClassName("category-foods"),
+                    len = foods.length,
+                    top = 0
+                this.segTopArr.push(top)  
+                for(var i=0;i<len;i++){
+                    top += foods[i].clientHeight
+                    this.segTopArr.push(top)            
+                }
+            },
+            dest(index, ev){
+                if(!ev._constructed){
+                    return
+                }
+                this.sideNotMove = true
+                var foods = document.getElementsByClassName("category-foods") 
+                this.foodScroll.scrollToElement(foods[index], 300)
+            }
         }
     }
 </script>
@@ -248,6 +280,13 @@
     .kind-list-item
         position: relative
         padding: 42px 30px 0 42px
+        .layout-click
+            position: absolute
+            left: 0
+            top: 0
+            width: 100%
+            height: 100%
+            opacity: 0
         .food-avatar-wrap
             width: 171px
             height: 171px
@@ -300,4 +339,34 @@
         position: absolute
         right: 0
         bottom: 0
+    .food-wrapper
+        right: 0
+        left: 0
+        top: 0
+        bottom: 0
+        background: rgba(0, 0, 0, .5)
+        transition: .3s
+        &.maskFood-enter, &.maskFood-leave-active
+            opacity: 0
+        .mask
+            position: absolute
+            width: 100%
+            height: 100%
+            background: rgba(7,17,27,0.6)
+            filter: blur(10px)
+            transition: .5s linear
+            
+        .food-profile
+            .food
+                position: absolute
+                left: 90px 
+                right: 90px
+                top: 405px
+                bottom: 405px
+                align-items: center
+                justify-content: space-around
+                background: #fff
+                border-radius: 20px
+            
+            
 </style>

@@ -22,11 +22,13 @@
                 <eleme-comments :seller="seller"></eleme-comments>
             </section>
         </section>
+        
     </section>
     <!--<elem-counter>
         <discount></discount>
         <shop-cart></shop-cart>
     </elem-counter>-->
+    <food></food>
   </div>
 </template>
 
@@ -37,6 +39,7 @@ import header from "./components/header/header"
 import goods from "./components/goods/goods"
 import comments from "./components/comments/comments"
 import BScroll from "better-scroll"
+import food from "./components/food/food"
 
 var eventHub = new Vue();
 export default {
@@ -65,7 +68,8 @@ export default {
   components: {
     "eleme-header": header,
     "eleme-goods": goods,
-    "eleme-comments": comments
+    "eleme-comments": comments,
+    "food": food
   }
 }
 </script>

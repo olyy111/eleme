@@ -6,27 +6,67 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <style>
-            html, body {
-              margin: 0;
-              position: relative;
-              height: 100%;
-              /*overflow: hidden;*/
-            }
-
-            #first {
-              height: 100%;
+            #box {
+              height: 400px;
               background: red;
             }
-            #second {
-              height: 100%;
-              background: blue;
+            p.fade-enter,p.fade-leave-active {
+                opacity: 0;
             }
+            .fade-enter-active {
+                opacity: 1;
+            }
+            p.fade-enter-active, p.fade-leave-active {
+                transition: .5s
+            }
+            
         </style>
+        <script>
+            document.addEventListener('touchstart', function (ev){
+                ev.preventDefault()
+            }, {
+                passive: false
+            })
+        </script>
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
-        <script src="https://cdn.example.com/assets/0.bundle.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
     </head>
     <body>  
+        <div id="demo">
+            <one></one>
+        
+            <two></two>
+        
+        </div>
+        <script>
+           var hub = new Vue();
+           Vue.component('one', {
+               template:`<div>
+                    <button @click="deliver(1)">
+                        Toggle
+                    </button>
+                </div>`,
+                methods: {
+                    deliver(ev){
+                        hub.$emit('test', ev)
+                    }
+                }
 
+           })
+           Vue.component('two', {
+               template: `<p>这是一些文字</p>`,
+               created(){
+                   hub.$on('test', function ($1, $2, $3){
+                       console.log($1, $2, $3)
+                   })
+               }
+           })
+           new Vue({
+               el: '#demo',
+               data: {
+
+               }
+           })
+        </script>
     </body>
 </html>

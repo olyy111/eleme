@@ -2,12 +2,15 @@
     <div class="add-cart">
         <transition name="slide">
             <div class="reduce-wrapper" v-show="food.count>0">
-                <span class="reduce icon-remove_circle_outline" @click="reduce"></span>
+                <span class="reduce icon-remove_circle_outline" 
+                    @click.stop.prevent="reduce"
+                ></span>
             </div>
         </transition>
         <span class="counter" v-show="food.count>0">{{food.count}}</span>
         <div class="add-wrapper">
-            <span class="plus icon-add_circle" @click="add($event)"></span>
+            <span class="plus icon-add_circle" @click.stop.prevent="add($event)"
+            ></span>
         </div>
     </div>
 </template>

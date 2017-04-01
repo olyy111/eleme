@@ -2,7 +2,7 @@
   <div class="shop-cart-wrapper">
     <div class="shopCart">
       <div class="content">
-        <div class="content-left"  @click.stop="toggleList">
+        <div class="content-left"  @touchstart="toggleList">
           <div class="logo-wrapper">
             <div class="badge" v-if="totalPrice !== 0">
               {{foodsNum}}
@@ -55,6 +55,7 @@
                 @before-leave="beforeLeave"
                 @leave="leave"
                 @after-leave="afterLeave"
+                tag="div"
               >
                 <li class="food" v-for="food in selectedFoods" :key="food">
                   <span class="name">{{food.name}}</span>
@@ -73,7 +74,7 @@
       </transition>
     </div>
     <transition name="backdrop">
-      <div class="backdrop" v-show="isFold" @click="toggleBackdrop"></div>
+      <div class="backdrop" v-show="isFold" @touchstart="toggleBackdrop"></div>
     </transition>
     
   
@@ -126,13 +127,6 @@
 
       
       this.$nextTick(() => {
-
-        //因为首页去除整个浏览器默认行为， 导致点击无效，这里阻止冒泡
-        var shopcart = document.getElementsByClassName('shop-cart-wrapper')[0];
-        shopcart.addEventListener('touchstart', function (ev){
-          ev.stopPropagation()
-        })
-
         var cartList = new BScroll(this.$refs.shopCartList, {
           click: true
         })
@@ -410,7 +404,7 @@
         border-bottom 1px solid rgba(7,17,27,0.1)
         overflow hidden
         .name
-          flex 1
+          flex 6
           font-size 48px
           color #000000
           line-height 162px
@@ -425,6 +419,7 @@
             font-size 42px
             margin-right -20px
         .cartcontrol-wrapper
+          flex: 2.2
           font-size 70px
           margin-top 25px
 .backdrop
