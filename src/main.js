@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuex from 'vuex'
+import BScroll from 'better-scroll'
 Vue.config.productionTip = false
 Vue.use(Vuex)
 var store = new Vuex.Store({
@@ -45,6 +46,13 @@ var store = new Vuex.Store({
       }
   }
 
+})
+
+//滚动条指令
+Vue.directive('scroll', {
+    inserted(el, binding){
+      var scroll = new BScroll(el)
+    }
 })
 
 var eventHub = new Vue()

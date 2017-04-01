@@ -59,19 +59,8 @@
                 </div>
             </div>
         </div>
-        <shop-cart :resInfo="resInfo" ref="shopCart"></shop-cart>  
-        <transition name="maskFood">
-            <div class="food-wrapper" v-show="isFoodShow" >
-                <div class="mask"
-                    
-                ></div>
-                <div class="food-profile" @click="notFoodShow($event)">
-                    <!--<food></food>-->
-                </div>
-            </div>
-        </transition> 
-            
-        </div> 
+        <shop-cart :resInfo="resInfo" ref="shopCart"></shop-cart>
+    </div> 
         
         
     </div>
@@ -339,34 +328,7 @@
         position: absolute
         right: 0
         bottom: 0
-    .food-wrapper
-        right: 0
-        left: 0
-        top: 0
-        bottom: 0
-        background: rgba(0, 0, 0, .5)
-        transition: .3s
-        &.maskFood-enter, &.maskFood-leave-active
-            opacity: 0
-        .mask
-            position: absolute
-            width: 100%
-            height: 100%
-            background: rgba(7,17,27,0.6)
-            filter: blur(10px)
-            transition: .5s linear
-            
-        .food-profile
-            .food
-                position: absolute
-                left: 90px 
-                right: 90px
-                top: 405px
-                bottom: 405px
-                align-items: center
-                justify-content: space-around
-                background: #fff
-                border-radius: 20px
+    
             
             
 </style>

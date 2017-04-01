@@ -1,43 +1,89 @@
 <template>
-    <transition name="foodShow"
-        @before-enter="before"
-        @enter="enter"
-        
-    >
-    <div class="food" 
-        v-if="isShowDetail" 
-        @touchstart="isShowDetail=!isShowDetail"
-         ref="foodWrapper"
-    >
-        <div class="avatar-wrap">
-        </div>
-        <div class="profile-wrapper">
-            <div class="info">
-                <div class="title">食物名称</div>
-                <div class="desc">
-                    <span>月售10分</span>
-                    <span>好评率100%</span>
+    <transition name="cloud">
+        <div class="food-wrapper" v-show="isShowDetail" v-scroll ref="foodWrapper">
+            <div class="food-scroll">
+                <transition name="mask">
+                    <div class="mask" 
+                        v-show="isShowMask"
+                        @touchend="isShowDetail=!isShowDetail"
+                    ></div>
+                </transition>
+                <transition name="foodShow"
+                    @before-enter="before"
+                    @enter="enter"
+                    @after-enter="afterEnter"
+                    @leave="leave"
+                >
+                <div class="food" 
+                    ref="food"
+                    v-show="isShowDetail"
+                    @touchend="showFood"
+                    
+                >   
+                    <div class="avatar-wrap">
+                        <img :src="food.image">
+                    </div>
+                    <div class="profile-wrapper">
+                        
+                        <div class="info" v-show="showInfo">
+                            <div class="title">{{food.name}}</div>
+                            <div class="desc">
+                                <span>{{food.sellCount}}</span>
+                                <span>{{food.rating}}%</span>
+                            </div>
+                            <div class="price">
+                                <span class="unit">{{food.price}}</span>
+                                <span class="oldPrice">{{food.oldPrice}}111111</span>
+                            </div>
+                            <div class="shopCart">
+                                <transition name="fade">
+                                    <div class="text">加入购物车</div>
+                                </transition>
+                                <!--<add-cart class="add-cart"></add-cart>-->
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
-                <div class="price">
-                    <span class="unit">￥10</span>
-                    <span class="oldPrice">￥20</span>
-                </div>
-                <div class="shopCart">
-                    <transition name="fade">
-                    <div class="text">加入购物车</div>
-                    </transition>
-                </div>
+                </transition>
+                <transition name="content">
+                    <div class="content" v-if="isShowContent">
+                        <div class="ratings-wrapper">
+                            <div class="ratings-head">
+                                    <h3 class="title">商品评价</h3>
+                                    <span class="percent">好评率(97%)</span>
+                                    <div class="rating-count">
+                                        30条评价
+                                        <i class="icon-keyboard_arrow_right"></i>
+                                    </div>
+                            </div>
+                            <div class="rating-list-wrapper">
+                                <ratings :food="food"></ratings>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
             </div>
+            
         </div>
-    </div>
     </transition>
 </template>
 <script>
+    import addCart from '../add/add'
     import Velocity from 'velocity-animate'
+    import {mapState} from 'vuex'
+    import ratings from '../ratings/ratings'
+    import BScroll from "better-scroll"
+
     export default {
         data(){
             return {
+                food: {},
                 isShowDetail: false,
+                showInfo: false,
+                isShowContent: false,
+                isShowMask: false,
                 clickedEl: {
                     width: 0,
                     height: 0,
@@ -49,10 +95,12 @@
                     height: 0,
                     left: 0,
                     top: 0
-                }
+                },
+                screenWidth: 0
             }
         },
         created() {
+            //点击goods某一个食物， 获取图片的屏幕位置
             this.$root.eventHub.$on('foodEv', (el, food) => {
                 var el = el.parentNode.querySelector(".img"),
                     rect = el.getBoundingClientRect()
@@ -60,36 +108,48 @@
                 this.clickedEl.height = rect.height
                 this.clickedEl.top = rect.top
                 this.clickedEl.left = rect.left
-                // this.$nextTick(() => {
-                //     var el = this.$refs.foodWrapper
-                //     var rc = el.getBoundingClientRect()  
-                //         this.targetEl.left = rc.left
-                //         this.targetEl.top= rc.top
-                //         this.targetEl.width= rc.width
-                //         this.targetEl.height= rc.height
-                //         console.log(this.targetEl)
-                // })
-                console.log(this.clickedEl.width)
                 this.isShowDetail = true
+                this.isShowMask = true
+                this.food = food
             })
+            
+            this.$nextTick( () => {
+                var scroll = new BScroll(this.$refs.foodWrapper)
+            })
+
         },
-        updated(){
-            var el = this.$refs.foodWrapper
-            console.log(el)
-            var rc = el.getBoundingClientRect()  
+        methods: {
+            showFood(){
+                this.isShowMask = false
+                this.isShowContent = true
+                var el = this.$refs.food
+                var foodDetailH = window.innerWidth
+                Velocity(el, {
+                    width: foodDetailH,
+                    height: foodDetailH,
+                    left: 0,
+                    top: 0
+                },{
+                    duration: 300
+                })
+            },
+            before(el){
+                //获取目标盒模型信息
+                var tarEl = this.$refs.food
+                el.style.display = "block"
+                var rc = tarEl.getBoundingClientRect()  
                 this.targetEl.left = rc.left
                 this.targetEl.top= rc.top
                 this.targetEl.width= rc.width
                 this.targetEl.height= rc.height
-                console.log(this.targetEl)
-        },
-        methods: {
-            before(el){
-                console.log(this.clickedEl.width)
+                //设定初始位置
                 el.style.width = this.clickedEl.width + "px"
                 el.style.height = this.clickedEl.height + "px"
                 el.style.top = this.clickedEl.top + "px"
-                el.style.top = this.clickedEl.top + "px"
+                el.style.left = this.clickedEl.left + "px"
+                console.log(tarEl)
+                this.showInfo = false
+                
             },
             enter(el, done){
                 Velocity(el, {
@@ -102,11 +162,84 @@
                     duration: 300,
                     complete: done
                 })
+                console.log(this.targetEl)
+            },
+            afterEnter(){
+                this.showInfo = true
+            },
+            leave(el, done){
+                Velocity(el, {opacity:0}, {
+                    duration: 300,
+                    complete: function(){
+                        el.style.opacity = 1
+                        done()
+                    }
+                })
             }
+        },
+        computed:{
+            ...mapState(['products'])
+        },
+        components: {
+            'add-cart': addCart,
+            'ratings': ratings
         }
     }
 </script>
 <style lang="stylus" scoped>
+    .food-wrapper
+        position: absolute
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        transition: .3s linear
+        &.cloud-leave-active
+            opacity: 0
+        .mask
+            position: absolute
+            width: 100%
+            height: 100%
+            background: rgba(7,17,27,0.6)
+            filter: blur(10px)
+            transition: .3s linear
+            &.mask-enter, &.mask-leave-active
+                opacity: 0
+        .content
+            width: 100%
+            height: 100% 
+            padding-top: 100%
+            transition: .3s
+            background: #f5f5f5
+            &.content-enter, &.content-leave-active
+                transform: translate3d(0, 100px, 0)
+            .ratings-wrapper
+                margin-top: 390px
+                padding-left: 60px
+                height: 500px
+                background: #fff
+                .ratings-head
+                    height: 130px
+                    padding-right: 60px
+                    line-height: 130px
+                    color: #000
+                    .title
+                        float: left
+                        font-size: 46px
+                        margin-right: 4px
+                    .percent
+                        float: left
+                        line-height: 136px
+                        font-size: 38px
+                    .rating-count
+                        float: right
+                        font-size: 40px
+                        color: #9e9e9e
+                        .icon-keyboard_arrow_right
+                            font-size: 60px
+                            vertical-align: -12px
+                
+
     .food
         position: absolute
         z-index: 100
@@ -114,16 +247,24 @@
         top: 400px
         right:90px
         bottom: 400px
-        transition: .5s
-        transform: translate3d(100px, 100px, 0) scale(.5, .5)
-        &.foodShow-enter, &.foodShow-leave-active
+        border-radius: 18px
+        &.foodShow-leave-active
             opacity: 0
         .avatar-wrap
+            position: relative
             width: 100%
             height: 0
             padding-top: 100%
             background: red
+            img
+                position: absolute
+                left: 0
+                top: 0
+                width: 100%
+                height: 100%
         .profile-wrapper
+            height 360px
+            background #fff
             .info
                 position relative
                 box-sizing border-box
@@ -167,6 +308,7 @@
                     text-align center
                     z-index 2
                     .text
+
                         box-sizing border-box
                         height 100%
                         line-height 66px
@@ -181,8 +323,10 @@
                         &.fade-enter,&.fade-leave-active{
                         opacity 0
                         }
-                    .cartcontrol
+                    .add-cart
                         position absolute
-                        right 30px
-                        bottom 30px
+                        top 0
+                        left 0
+    .rating-list-wrapper
+        padding: 0 60px
 </style>
