@@ -1,6 +1,6 @@
 <template>
     <div class="goods">
-        <div class="sidebar-wrapper" ref="sideWrapper">
+        <div class="sidebar-wrapper" ref="sideWrapper" v-scroll="{method:sideScrollEv,opts: sideOpts}">
             <ul class="sidebar" ref="sideBar">
                 <li class="item" 
                     v-for="(item, index) in resInfo.goods"
@@ -16,7 +16,7 @@
                 </li>
             </ul>
         </div>
-        <div class="foods-wrapper" ref="foodsWrapper">
+        <div class="foods-wrapper" ref="foodsWrapper" v-scroll="{method: foodsScrollEv,opts:foodsOpts}">
             <div class="foods">
                 <div class="category-foods" v-for="item in goods">
                     <div class="kind-top">
@@ -26,7 +26,6 @@
                     <ul class="kind-list">
                         <li class="kind-list-item" 
                             v-for="(food, index) in item.foods"
-                            @click="show"
                              ref="test"
                         >
                         
@@ -52,7 +51,7 @@
                                 </div>
                                 
                             </div>
-                            <div class="layout-click" @touchend="showFood($event, food)"></div>
+                            <div class="layout-click" v-tap="{methods:showFood, food: food}"></div>
                             <add-cart class="add-pos" :food="food"></add-cart>
                         </li>
                     </ul>
@@ -81,12 +80,14 @@
             this.$nextTick(() => {
                 axios.get('static/data.json').then((res) => {
                     this.$nextTick(() => {
-                        this._initScroll()
                         this.getSegTop()
                         this.computedSideBarSize()
                     })
                 });
            })
+        },
+        updated(){
+            this.foodScroll.refresh()
         },
         data(){
             return {
@@ -101,6 +102,15 @@
                     innerHeight: 0,
                     showHeight: 0,
                     min:0
+                },
+                foodsOpts: {
+                    click: true,
+                    probeType: 3,
+                    bounce: false
+                },
+                sideOpts: {
+                    click: true,
+                    probeType: 3
                 },
                 sideNotMove: false //如果是点击sidebar的区块， 不会自动校正位置
             }
@@ -141,32 +151,12 @@
             }
         },
         methods: {
-            show(){
+            sideScrollEv(scroll){
+                this.sideScroll = scroll
             },
-            showFood(ev, food){
-                this.isFoodShow = true
-                this.$root.eventHub.$emit('foodEv', ev.target, food)
-            },
-            notFoodShow(ev){
-                this.isFoodShow = false
-            },
-            computedSideBarSize(){
-                this.sideEl.wrapperHeight = this.$refs.sideWrapper.clientHeight
-                this.sideEl.innerHeight = this.$refs.sideBar.clientHeight
-                this.sideEl.showHeight = this.sideEl.wrapperHeight - this.$refs.shopCart.$el.clientHeight
-                this.min = this.sideEl.innerHeight - this.sideEl.wrapperHeight
-            },
-            _initScroll() {
-                this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
-                    click: true,
-                    probeType: 3,
-                    bounce: false
-                })
-                this.sideScroll = new BScroll(this.$refs.sideWrapper, {
-                    click: true,
-                    probeType: 3
-                })
-                this.foodScroll.on('scroll', (pos) => {
+            foodsScrollEv(scroll){
+                this.foodScroll = scroll
+                scroll.on('scroll', (pos) => {
                     var currentY = Math.abs(pos.y),
                         len = this.segTopArr.length,
                         arr = this.segTopArr
@@ -179,9 +169,22 @@
                         this.activeIndex = len-1
                     }
                 })
-                this.foodScroll.on('scrollStart', (pos) => {
+                scroll.on('scrollStart', (pos) => {
                     this.sideNotMove = false
                 })
+            },
+            showFood(params){
+                this.isFoodShow = true
+                this.$root.eventHub.$emit('foodEv', params.event.target, params.food)
+            },
+            notFoodShow(ev){
+                this.isFoodShow = false
+            },
+            computedSideBarSize(){
+                this.sideEl.wrapperHeight = this.$refs.sideWrapper.clientHeight
+                this.sideEl.innerHeight = this.$refs.sideBar.clientHeight
+                this.sideEl.showHeight = this.sideEl.wrapperHeight - this.$refs.shopCart.$el.clientHeight
+                this.min = this.sideEl.innerHeight - this.sideEl.wrapperHeight
             },
             getSegTop(){
                 var foods = document.getElementsByClassName("category-foods"),

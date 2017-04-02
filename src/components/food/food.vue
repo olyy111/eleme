@@ -2,26 +2,21 @@
     <transition name="cloud">
         <div class="food-wrapper" v-show="isShowDetail" v-scroll ref="foodWrapper">
             <div class="food-scroll">
-                <transition name="mask">
-                    <div class="mask" 
-                        v-show="isShowMask"
-                        @touchend="isShowDetail=!isShowDetail"
-                    ></div>
-                </transition>
+                
                 <transition name="foodShow"
                     @before-enter="before"
                     @enter="enter"
                     @after-enter="afterEnter"
                     @leave="leave"
-                >
-                <div class="food" 
-                    ref="food"
-                    v-show="isShowDetail"
-                    @touchend="showFood"
                     
-                >   
-                    <div class="avatar-wrap">
-                        <img :src="food.image">
+                >
+                    <div class="food" 
+                        ref="food"
+                        v-show="isShowDetail"
+                        v-tap="{methods: showFood}"
+                        
+                    >   
+                    <div class="avatar-wrap"　:style="bcg" ref="imgWrap">
                     </div>
                     <div class="profile-wrapper">
                         
@@ -64,8 +59,14 @@
                         </div>
                     </div>
                 </transition>
+                
             </div>
-            
+            <transition name="mask">
+                <div class="mask" 
+                    v-show="isShowMask"
+                    @touchend="isShowDetail=!isShowDetail"
+                ></div>
+            </transition>
         </div>
     </transition>
 </template>
@@ -75,7 +76,8 @@
     import {mapState} from 'vuex'
     import ratings from '../ratings/ratings'
     import BScroll from "better-scroll"
-
+    
+    
     export default {
         data(){
             return {
@@ -96,7 +98,8 @@
                     left: 0,
                     top: 0
                 },
-                screenWidth: 0
+                screenWidth: 0,
+                scroll: {}
             }
         },
         created() {
@@ -113,10 +116,31 @@
                 this.food = food
             })
             
-            this.$nextTick( () => {
-                var scroll = new BScroll(this.$refs.foodWrapper)
+            this.$nextTick( function () {
+                // this.scroll = new BScroll(this.$refs.foodWrapper, {
+                //     probeType: 2
+                // })
+                // this.scroll.on('scroll', (pos) => {
+                //     if(pos.y>0){
+                //         this.isShowContent = false
+                        
+                //          Velocity(this.$refs.food, {
+                //             width: this.targetEl.width,
+                //             height: this.targetEl.height,
+                //             top: this.targetEl.top,
+                //             left: this.targetEl.left
+
+                //         }, {
+                //             duration: 300
+                //         })
+                //         this.isShowContent = false
+                //     }
+                // })
             })
 
+        },
+        updated(){
+            // this.scroll.refresh()
         },
         methods: {
             showFood(){
@@ -147,7 +171,6 @@
                 el.style.height = this.clickedEl.height + "px"
                 el.style.top = this.clickedEl.top + "px"
                 el.style.left = this.clickedEl.left + "px"
-                console.log(tarEl)
                 this.showInfo = false
                 
             },
@@ -162,10 +185,14 @@
                     duration: 300,
                     complete: done
                 })
-                console.log(this.targetEl)
             },
             afterEnter(){
                 this.showInfo = true
+                var img = new Image()
+                img.onload = () => {
+                    this.$refs.imgWrap.style["background-image"] = "url("+ img.src +")"
+                } 
+                img.src = this.food.image
             },
             leave(el, done){
                 Velocity(el, {opacity:0}, {
@@ -178,7 +205,12 @@
             }
         },
         computed:{
-            ...mapState(['products'])
+            ...mapState(['products']),
+            bcg(){
+                return {
+                    "background-image": "url("+ this.food.icon +")"
+                }
+            }
         },
         components: {
             'add-cart': addCart,
@@ -196,8 +228,13 @@
         transition: .3s linear
         &.cloud-leave-active
             opacity: 0
+        .food-scroll
+            position: relative
+            z-index: 100
         .mask
             position: absolute
+            left: 0
+            top: 0
             width: 100%
             height: 100%
             background: rgba(7,17,27,0.6)
@@ -207,16 +244,17 @@
                 opacity: 0
         .content
             width: 100%
-            height: 100% 
             padding-top: 100%
+            padding-bottom: 144px
             transition: .3s
             background: #f5f5f5
             &.content-enter, &.content-leave-active
                 transform: translate3d(0, 100px, 0)
+            &.content-leave-active
+                opacity: 0
             .ratings-wrapper
                 margin-top: 390px
                 padding-left: 60px
-                height: 500px
                 background: #fff
                 .ratings-head
                     height: 130px
@@ -255,13 +293,8 @@
             width: 100%
             height: 0
             padding-top: 100%
-            background: red
-            img
-                position: absolute
-                left: 0
-                top: 0
-                width: 100%
-                height: 100%
+            background-size: cover
+            background-position: center center
         .profile-wrapper
             height 360px
             background #fff
