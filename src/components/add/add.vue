@@ -3,13 +3,14 @@
         <transition name="slide">
             <div class="reduce-wrapper" v-show="food.count>0">
                 <span class="reduce icon-remove_circle_outline" 
-                    @click.stop.prevent="reduce"
+                    v-tap="{methods: reduce}"
                 ></span>
             </div>
         </transition>
         <span class="counter" v-show="food.count>0">{{food.count}}</span>
         <div class="add-wrapper">
-            <span class="plus icon-add_circle" @click.stop.prevent="add($event)"
+            <span class="plus icon-add_circle" 
+                v-tap="{methods: add}"
             ></span>
         </div>
     </div>
@@ -25,19 +26,14 @@
             }
         },
         methods: {
-            add(ev){
-                if(!ev._constructed) return
+            add(params){
                 this.$store.commit('add', this.food)
-                this.$root.eventHub.$emit('cart.add', ev)
+                this.$root.eventHub.$emit('cart.add', params.event)
             },
             reduce(){
                 this.$store.commit('reduce', this.food)
             }
-        },
-        computed: {
-            
         }
-
     }
 </script>
 <style lang="stylus" scoped>

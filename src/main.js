@@ -44,6 +44,7 @@ var store = new Vuex.Store({
         }
       },
       clear(state){
+        state.products.forEach( food => {food.count = 0})
         state.products = []
       }
   }

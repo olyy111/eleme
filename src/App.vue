@@ -1,34 +1,42 @@
 <template>
   <div id="app">
-    <eleme-header :seller="seller">
-      
-    </eleme-header>
-    <section class="eleme-bd" @scroll="initScroll">
-        <nav class="eleme-nav">
-            <div class="nav-item-wrap">
-                <router-link to="/goods">商品</router-link>
-            </div>
-            <div class="nav-item-wrap">
-                <router-link to="/comments">
-                    评价
-                    <span class="hlight">({{seller.score}})</span>
-                </router-link>
-            </div>
-            
-        </nav>
-        <section class="content-wrap">
-            <section class="content">
-                <eleme-goods :resInfo="resInfo"></eleme-goods>
-                <eleme-comments :seller="seller"></eleme-comments>
+    <section class="app-inner"  :style="blurBcg">
+        <eleme-header :seller="seller">
+        </eleme-header>
+        <section class="eleme-bd" >
+            <nav class="eleme-nav">
+                <div class="nav-item-wrap">
+                    <router-link to="/goods">商品</router-link>
+                </div>
+                <div class="nav-item-wrap">
+                    <router-link to="/comments">
+                        评价
+                        <span class="hlight">({{seller.score}})</span>
+                    </router-link>
+                </div>
+                
+            </nav>
+            <section class="content-wrap">
+                <section class="content">
+                    <eleme-goods :resInfo="resInfo"></eleme-goods>
+                    <eleme-comments :seller="seller"></eleme-comments>
+                </section>
             </section>
+            
         </section>
-        
     </section>
+    
     <!--<elem-counter>
         <discount></discount>
         <shop-cart></shop-cart>
     </elem-counter>-->
-    <food></food>
+    <food :is-show-detail="isBlur"  @appblur="blur"></food>
+    <transition name="mask" >
+        <div class="mask" 
+            v-show="isShowMask"
+            v-tap="{methods: closeMask}"
+        ></div>
+    </transition>
   </div>
 </template>
 
@@ -46,11 +54,14 @@ export default {
   name: 'app',
   data(){
       return {
-        //数据还没来的时候子组件就渲染进去了，来了数据又更新视图
+        //数据异步获取时候子组件已经渲染完毕，数据更新后视图在更新
         //如果值是null 在子组件用的时候就会报错
           seller: {},
           resInfo: {},
-          eventHub: eventHub
+          eventHub: eventHub,
+          isBlur: false,
+          isShowMask: false,
+
       }
   },
   created(){
@@ -62,7 +73,28 @@ export default {
       })
   },
   methods: {
-      initScroll(){
+      blur(){
+          this.isBlur = true
+          this.isShowMask = true
+      },
+      closeMask(){
+          this.isBlur = false
+          this.isShowMask = false
+          console.log(this.isBlur)
+      }
+  },
+  computed: {
+      blurBcg(){
+          var rs = ''
+          console.log(this.isBlur)
+          if(this.isBlur){
+              rs="blur(100px)"
+          }else {
+              rs="none"
+          }
+          return {
+              filter: rs
+          }
       }
   },
   components: {
@@ -74,7 +106,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
     //根组件中加入依赖树
     @import 'common/stylus/index'
     body, html
@@ -82,6 +114,12 @@ export default {
         height: 100%
         overflow: hidden
         font-family: Helvetica 
+    #app
+        width: 100%
+        height: 100%
+        .app-inner
+            width: 100%
+            height: 100%
     .eleme-nav 
         display: flex;
         flex-direction: row
@@ -107,4 +145,15 @@ export default {
             bottom: 0
             .content
                 height: 100%
+     .mask
+            position: absolute
+            left: 0
+            top: 0
+            width: 100%
+            height: 100%
+            background: rgba(7,17,27,0.5)
+            filter: blur(10px)
+            transition: .3s linear
+            &.mask-enter, &.mask-leave-active
+                opacity: 0
 </style>

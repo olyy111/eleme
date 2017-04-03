@@ -1,6 +1,6 @@
 <template>
     <transition name="cloud">
-        <div class="food-wrapper" v-show="isShowDetail" v-scroll ref="foodWrapper">
+        <div class="food-wrapper" v-show="isShowDetail" v-scroll="{method: _scroll,opts:scrollOpts}" ref="foodWrapper">
             <div class="food-scroll">
                 
                 <transition name="foodShow"
@@ -8,7 +8,6 @@
                     @enter="enter"
                     @after-enter="afterEnter"
                     @leave="leave"
-                    
                 >
                     <div class="food" 
                         ref="food"
@@ -16,31 +15,30 @@
                         v-tap="{methods: showFood}"
                         
                     >   
-                    <div class="avatar-wrap"　:style="bcg" ref="imgWrap">
-                    </div>
-                    <div class="profile-wrapper">
-                        
-                        <div class="info" v-show="showInfo">
-                            <div class="title">{{food.name}}</div>
-                            <div class="desc">
-                                <span>{{food.sellCount}}</span>
-                                <span>{{food.rating}}%</span>
-                            </div>
-                            <div class="price">
-                                <span class="unit">{{food.price}}</span>
-                                <span class="oldPrice">{{food.oldPrice}}111111</span>
-                            </div>
-                            <div class="shopCart">
-                                <transition name="fade">
-                                    <div class="text">加入购物车</div>
-                                </transition>
-                                <!--<add-cart class="add-cart"></add-cart>-->
-                                
-                            </div>
+                        <div class="avatar-wrap"　:style="bcg" ref="imgWrap">
                         </div>
+                            <div class="profile-wrapper">
+                                <div class="info" v-show="showInfo">
+                                    <div class="title">{{food.name}}</div>
+                                    <div class="desc">
+                                        <span>{{food.sellCount}}</span>
+                                        <span>{{food.rating}}%</span>
+                                    </div>
+                                    <div class="price">
+                                        <span class="unit">{{food.price}}</span>
+                                        <span class="oldPrice">{{food.oldPrice}}111111</span>
+                                    </div>
+                                    <div class="shopCart">
+                                        <transition name="fade">
+                                            <div class="text">加入购物车</div>
+                                        </transition>
+                                        <!--<add-cart class="add-cart"></add-cart>-->
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        
                     </div>
-                    
-                </div>
                 </transition>
                 <transition name="content">
                     <div class="content" v-if="isShowContent">
@@ -61,12 +59,12 @@
                 </transition>
                 
             </div>
-            <transition name="mask">
+            <!--<transition name="mask">
                 <div class="mask" 
                     v-show="isShowMask"
                     @touchend="isShowDetail=!isShowDetail"
                 ></div>
-            </transition>
+            </transition>-->
         </div>
     </transition>
 </template>
@@ -79,13 +77,19 @@
     
     
     export default {
+        props:{
+            isShowDetail: {
+                type: Boolean,
+                default: false
+            }
+        },
         data(){
             return {
                 food: {},
-                isShowDetail: false,
                 showInfo: false,
                 isShowContent: false,
                 isShowMask: false,
+                limitFlag: false,
                 clickedEl: {
                     width: 0,
                     height: 0,
@@ -99,7 +103,11 @@
                     top: 0
                 },
                 screenWidth: 0,
-                scroll: {}
+                scroll: {},
+                scrollOpts: {
+                    probeType: 2,
+                    bounce: false
+                }
             }
         },
         created() {
@@ -111,39 +119,44 @@
                 this.clickedEl.height = rect.height
                 this.clickedEl.top = rect.top
                 this.clickedEl.left = rect.left
-                this.isShowDetail = true
+                this.$emit('appblur')
                 this.isShowMask = true
                 this.food = food
             })
-            
-            this.$nextTick( function () {
-                // this.scroll = new BScroll(this.$refs.foodWrapper, {
-                //     probeType: 2
-                // })
-                // this.scroll.on('scroll', (pos) => {
-                //     if(pos.y>0){
-                //         this.isShowContent = false
-                        
-                //          Velocity(this.$refs.food, {
-                //             width: this.targetEl.width,
-                //             height: this.targetEl.height,
-                //             top: this.targetEl.top,
-                //             left: this.targetEl.left
-
-                //         }, {
-                //             duration: 300
-                //         })
-                //         this.isShowContent = false
-                //     }
-                // })
-            })
-
-        },
-        updated(){
-            // this.scroll.refresh()
         },
         methods: {
+            _scroll(scroll){
+                this.scroll = scroll
+                //切出动画
+                this.scroll.on('scroll', (pos) => {
+                    if(pos.y===0){
+
+                        //防止在分界点重复动画
+                        if(!this.isShowContent){
+                            return
+                        }
+                        this.isShowContent = false
+                         Velocity(this.$refs.food, {
+                            width: this.targetEl.width,
+                            height: this.targetEl.height,
+                            top: this.targetEl.top,
+                            left: this.targetEl.left
+
+                        }, {
+                            duration: 300,
+                            complete: () => {
+                                console.log(this.limitFlag)
+                                this.limitFlag = false
+                            }
+                        })
+                        this.$emit('appblur')
+                    }
+                })
+            },
             showFood(){
+                if(this.limitFlag){
+                    return
+                }
                 this.isShowMask = false
                 this.isShowContent = true
                 var el = this.$refs.food
@@ -154,7 +167,10 @@
                     left: 0,
                     top: 0
                 },{
-                    duration: 300
+                    duration: 300,
+                    complete: () => {
+                        this.limitFlag = true
+                    }
                 })
             },
             before(el){
@@ -198,7 +214,7 @@
                 Velocity(el, {opacity:0}, {
                     duration: 300,
                     complete: function(){
-                        el.style.opacity = 1
+                        el.style.opacity = "1"
                         done()
                     }
                 })
@@ -237,7 +253,7 @@
             top: 0
             width: 100%
             height: 100%
-            background: rgba(7,17,27,0.6)
+            background: rgba(7,17,27,0.5)
             filter: blur(10px)
             transition: .3s linear
             &.mask-enter, &.mask-leave-active

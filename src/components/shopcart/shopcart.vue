@@ -46,16 +46,15 @@
         <div class="shopcart-list" v-show="isFold">
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="empty" @click="clear">清空</span>
+            <span class="empty" v-tap="{methods: clear}">清空</span>
           </div>
-          <div class="list-content" ref="shopCartList">
-            <ul>
+          <div class="list-content" ref="shopCartList" v-scroll>
               <transition-group
                 name="cartList"
                 @before-leave="beforeLeave"
                 @leave="leave"
                 @after-leave="afterLeave"
-                tag="div"
+                tag="ul"
               >
                 <li class="food" v-for="food in selectedFoods" :key="food">
                   <span class="name">{{food.name}}</span>
@@ -68,7 +67,6 @@
                   </div>
                 </li>
               </transition-group>
-            </ul>
           </div>
         </div>
       </transition>
@@ -124,14 +122,6 @@
       this.$root.eventHub.$on('cart.add', (ev) => {
         this.drop(ev.target)
       })
-
-      
-      this.$nextTick(() => {
-        var cartList = new BScroll(this.$refs.shopCartList, {
-          click: true
-        })
-      })
-      
     },
     methods: {
       beforeLeave(el){
@@ -153,6 +143,9 @@
       },
       clear(){
         this.isFold = false
+        this.$nextTick( () => {
+            this.$store.commit('clear')
+        })
       },
       toggleList(){
         if(!this.totalPrice){
@@ -394,7 +387,7 @@
         color #666666
         padding 0 75px
     .list-content
-      max-height 1200px
+      max-height 700px
       overflow hidden
       .food
         position relative

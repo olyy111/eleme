@@ -5,7 +5,7 @@
                 <li class="item" 
                     v-for="(item, index) in resInfo.goods"
                     :class="{active: activeIndex === index}"
-                    @click="dest(index, $event)"
+                    v-tap="{methods: dest, index: index}"
                 >
                     <span class="item-text">
                         {{item.name}}
@@ -28,7 +28,6 @@
                             v-for="(food, index) in item.foods"
                              ref="test"
                         >
-                        
                             <div class="food-avatar-wrap">
                                 <img :src="food.icon" class="img">
                             </div>
@@ -176,6 +175,7 @@
             showFood(params){
                 this.isFoodShow = true
                 this.$root.eventHub.$emit('foodEv', params.event.target, params.food)
+                this.$emit('appblur')
             },
             notFoodShow(ev){
                 this.isFoodShow = false
@@ -196,13 +196,10 @@
                     this.segTopArr.push(top)            
                 }
             },
-            dest(index, ev){
-                if(!ev._constructed){
-                    return
-                }
+            dest(params){
                 this.sideNotMove = true
                 var foods = document.getElementsByClassName("category-foods") 
-                this.foodScroll.scrollToElement(foods[index], 300)
+                this.foodScroll.scrollToElement(foods[params.index], 300)
             }
         }
     }
