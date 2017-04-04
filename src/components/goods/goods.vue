@@ -85,9 +85,6 @@
                 });
            })
         },
-        updated(){
-            this.foodScroll.refresh()
-        },
         data(){
             return {
                 segTopArr: [],
@@ -96,6 +93,7 @@
                 sideScroll: {},
                 isParMove: true,
                 isFoodShow: false,
+                shopCart: {},
                 sideEl: {
                     wrapperHeight: 0,
                     innerHeight: 0,
@@ -207,6 +205,8 @@
 <style lang="stylus">
     .goods
         height: 100%
+        width: 50%
+        float: left
         display: flex
         flex-direction: row
         .sidebar-wrapper

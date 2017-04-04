@@ -11,7 +11,8 @@ Vue.use(vueTap);
 Vue.use(Vuex)
 var store = new Vuex.Store({
   state:{
-    products: []
+    products: [],
+    allProducts: []
   },
   getters: {
     foodsNum(state){
@@ -23,6 +24,9 @@ var store = new Vuex.Store({
     }
   },
   mutations: {
+      getAllProducts(state, products){
+          state.allProcuts
+      },
       add(state, food){
           var product = state.products.find( product => product === food)
           if(!product){
@@ -87,7 +91,6 @@ Vue.directive('scroll', {
 
 var eventHub = new Vue()
 new Vue({
-  el: '#app',
   router,
   store,
   template: '<App/>',
@@ -95,4 +98,4 @@ new Vue({
   data: {
       eventHub: eventHub
   }
-})
+}).$mount('#app')

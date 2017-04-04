@@ -2,7 +2,6 @@
     <transition name="cloud">
         <div class="food-wrapper" v-show="isShowDetail" v-scroll="{method: _scroll,opts:scrollOpts}" ref="foodWrapper">
             <div class="food-scroll">
-                
                 <transition name="foodShow"
                     @before-enter="before"
                     @enter="enter"
@@ -37,7 +36,6 @@
                                     </div>
                                 </div>
                             </div>
-                        
                     </div>
                 </transition>
                 <transition name="content">
@@ -46,8 +44,9 @@
                             <div class="ratings-head">
                                     <h3 class="title">商品评价</h3>
                                     <span class="percent">好评率(97%)</span>
-                                    <div class="rating-count">
+                                    <div class="rating-count" v-tap="{methods: showComments}">
                                         30条评价
+                                        
                                         <i class="icon-keyboard_arrow_right"></i>
                                     </div>
                             </div>
@@ -59,12 +58,14 @@
                 </transition>
                 
             </div>
-            <!--<transition name="mask">
-                <div class="mask" 
-                    v-show="isShowMask"
-                    @touchend="isShowDetail=!isShowDetail"
-                ></div>
-            </transition>-->
+            <transition name="comments-slide">
+                <div class="comments-wrapper" v-show="isShowComments">
+                    <category-head @close-comments="closeComments"></category-head>
+                    <category-comments :category-desc="categoryDesc"></category-comments>
+                    <ratings :food="food" class="border"></ratings>
+                </div>
+            </transition>
+            
         </div>
     </transition>
 </template>
@@ -74,8 +75,9 @@
     import {mapState} from 'vuex'
     import ratings from '../ratings/ratings'
     import BScroll from "better-scroll"
-    
-    
+    import categoryhead from "../categoryhead/categoryhead"
+    import categorycomments from "../categorycomments/categorycomments"
+
     export default {
         props:{
             isShowDetail: {
@@ -107,8 +109,15 @@
                 scrollOpts: {
                     probeType: 2,
                     bounce: false
-                }
+                },
+                isShowComments: false,
+                categoryDesc: {
+                    type0: "满意",
+                    type1: "不满意"
+                },
+                
             }
+            
         },
         created() {
             //点击goods某一个食物， 获取图片的屏幕位置
@@ -125,6 +134,12 @@
             })
         },
         methods: {
+            showComments(){
+                this.isShowComments = true
+            },
+            closeComments(){
+                this.isShowComments = false
+            },
             _scroll(scroll){
                 this.scroll = scroll
                 //切出动画
@@ -145,7 +160,6 @@
                         }, {
                             duration: 300,
                             complete: () => {
-                                console.log(this.limitFlag)
                                 this.limitFlag = false
                             }
                         })
@@ -230,7 +244,9 @@
         },
         components: {
             'add-cart': addCart,
-            'ratings': ratings
+            'ratings': ratings,
+            "category-head": categoryhead,
+            'category-comments': categorycomments
         }
     }
 </script>
@@ -376,6 +392,17 @@
                         position absolute
                         top 0
                         left 0
-    .rating-list-wrapper
-        padding: 0 60px
+    
+    .comments-wrapper
+        position: fixed
+        z-index: 110
+        left: 0
+        top: 0
+        right: 0
+        bottom: 0
+        background: #f5f5f5
+        transition: .3s linear
+        &.comments-slide-enter, &.comments-slide-leave-active
+            transform: translate3d(100%, 0, 0)
+
 </style>
