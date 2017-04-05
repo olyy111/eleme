@@ -9,11 +9,13 @@
       //适配
         document.addEventListener('DOMContentLoaded', function (){
             var viewportEl = document.createElement('meta'),
-                scale = 1/window.devicePixelRatio;
+                scale = 1/window.devicePixelRatio,
+                meta = document.head.querySelector('meta')
 
             viewportEl.name = "viewport";
-            viewportEl.content = "width=device-width, initial-scale="+ scale +", maximum-scale="+ scale +", minimum-scale="+ scale +", user-scalable=no";
-            document.head.appendChild(viewportEl);
+            // viewportEl.content = "width=device-width, initial-scale="+ scale +", maximum-scale="+ scale +", minimum-scale="+ scale +", user-scalable=no";
+            viewportEl.content = "width=1242"
+            document.head.insertBefore(viewportEl, meta);
 
             var h = window.innerWidth;
             document.documentElement.style.fontSize = h/15 + 'px';

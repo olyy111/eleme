@@ -51,7 +51,7 @@
                                     </div>
                             </div>
                             <div class="rating-list-wrapper">
-                                <ratings :food="food"></ratings>
+                                <ratings :ratings="food.ratings"></ratings>
                             </div>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                 <div class="comments-wrapper" v-show="isShowComments">
                     <category-head @close-comments="closeComments"></category-head>
                     <category-comments :category-desc="categoryDesc"></category-comments>
-                    <ratings :food="food" class="border"></ratings>
+                    <ratings :ratings="food.ratings" class="border"></ratings>
                 </div>
             </transition>
             

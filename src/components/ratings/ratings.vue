@@ -10,7 +10,10 @@
                         <span class="name">{{rating.username}}</span>
                         <span class="time">{{rating.rateTime|formatDate}}</span>
                     </header>
-                    <div class="content">
+                    <div class="star-wrapper">
+                        <star :score="rating.score"></star>
+                    </div>
+                    <div class="rating-content">
                         <span class="icon-wrap">
                             <i class="icon-thumb_up" v-if="rating.rateType === 0"></i>
                             <i class="icon-thumb_down" v-if="rating.rateType === 1"></i>
@@ -26,13 +29,13 @@
     
 </template>
 <script>
-    
+    import star from "../star/star"
     export default {
         props: {
-            food: {
-                type: Object,
+            ratings: {
+                type: Array,
                 default(){
-                    return {}
+                    return []
                 }
             }
         },
@@ -70,11 +73,11 @@
             selectedComments(){
                 var ratings = []
                 if(this.commentsType === -1){
-                    ratings = this.food.ratings
+                    ratings = this.ratings
                 }else if(this.commentsType === 0){
-                    ratings = this.food.ratings.filter( rating => rating.rateType == 0)
+                    ratings = this.ratings.filter( rating => rating.rateType == 0)
                 }else if(this.commentsType === 1){
-                    ratings = this.food.ratings.filter( rating => rating.rateType == 1)
+                    ratings = this.ratings.filter( rating => rating.rateType == 1)
                 }
                 if(this.isOnlyShowContent){
                     ratings = ratings
@@ -83,6 +86,9 @@
                 }
                 return ratings
             }
+        },
+        components: {
+            star
         }
     }
 </script>
@@ -115,10 +121,11 @@
                     color: #999999
                     font-size: 36px
                     margin-bottom: 12px
-                .content
+                .rating-content
                     font-size: 42px
                     line-height: 58px
                     display: flex
+                    flex-wrap: wrap
                     .icon-wrap
                         margin-right: 16px
                         .icon-thumb_up

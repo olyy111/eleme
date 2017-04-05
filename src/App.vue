@@ -5,21 +5,19 @@
         </eleme-header>
         <section class="eleme-bd" >
             <div class="eleme-nav">
-                <div class="nav-item-wrap">
-                    <router-link to="/goods">商品</router-link>
+                <div class="nav-item-wrap" v-tap="{methods:moveToGoods}">
+                    <a>商品</a>
                 </div>
-                <div class="nav-item-wrap">
-                    <router-link to="/comments">
-                        评价
-                        <span class="hlight">({{seller.score}})</span>
-                    </router-link>
+                <div class="nav-item-wrap" v-tap="{methods:moveToComments}">
+                    <a>评价</a>
+                    <span class="hlight">({{seller.score}})</span>
                 </div>
-                <span class="line"></span>
+                <span class="line" ref="line"></span>
             </div>
             <section class="content-wrap" v-scroll="{method:scrollFn, opts:scrollOpts}">
                 <section class="content"  ref="scrollWrap">
-                    <eleme-goods :resInfo="resInfo" ></eleme-goods>
-                    <eleme-comments :seller="seller"></eleme-comments>
+                    <eleme-goods :resInfo="resInfo" ref="goods"></eleme-goods>
+                    <eleme-comments :resInfo="resInfo" ref="comments"></eleme-comments>
                 </section>
             </section>
             
@@ -45,7 +43,7 @@ import comments from "./components/comments/comments"
 import shopcart from "./components/shopcart/shopcart"
 import BScroll from "better-scroll"
 import food from "./components/food/food"
-
+import Velocity from "velocity-animate"
 var eventHub = new Vue();
 export default {
     name: 'app',
@@ -63,7 +61,9 @@ export default {
                 scrollX: true,
                 probeType: 3,
                 momentum: false
-            }
+            },
+            scroll: {},
+            screenX: 0
         }
     },
     created(){
@@ -75,37 +75,87 @@ export default {
         }).catch( (err) => {
             console.log(err)
         } )
+        this.screenX = window.screen.width*3
         
     },
     methods: {
+        moveToComments(){
+            Velocity(this.$refs.line, {
+                translateX: this.screenX/2,
+                scaleX: 2
+            }, 200)
+            console.log(this.scroll)
+            this.scroll.scrollTo(-this.screenX, 0, 300)
+        },
+        moveToGoods(){
+            Velocity(this.$refs.line, {
+                translateX: 0,
+                scaleX: 1
+            }, 200)
+            this.scroll.scrollTo(0, 0, 300)
+        },
         scrollFn(scroll){
-            var screenX = document.documentElement.clientWidth
+            this.scroll = scroll
+            var screenX = this.screenX
             var oriX = 0
             var oriTime = 0
+            var line = this.$refs.line
+            var lineArea = screenX/2
+            var lineEnd = 2
+            var scrollArea = screenX
+            var moveflag = false
+            var endCount = 0
             scroll.on('scrollStart', (pos) => {
+                moveflag = true
                 oriX = this.$refs.scrollWrap.getBoundingClientRect().left
                 oriTime = +new Date()
-                console.log(oriTime)
             })
             scroll.on('scroll', (pos) => {
+                console.log(11111)
+                line.style.transform = "translateX("+ Math.abs(pos.x)/2 +"px) scaleX("+ (Math.abs(pos.x)/screenX + 1) +")"    
             })
             scroll.on('scrollEnd', () => {
+                endCount ++
+                if(endCount === 2){
+                    endCount = 0
+                    return
+                }
                 var endX = this.$refs.scrollWrap.getBoundingClientRect().left
                 var endTime = +new Date()
                 var speed = Math.abs(endX - oriX)/(endTime - oriTime)
                 if(speed > 2){
                     if(endX < oriX){
+                        Velocity(line, {
+                            translateX: lineArea,
+                            scaleX: 2
+                        }, 300)
                         scroll.scrollTo(-screenX, 0, 300)
                     }else {
+                        Velocity(line, {
+                            translateX: 0,
+                            scaleX: 1
+                        }, 300)
                         scroll.scrollTo(0, 0, 300)
                     }
                     return
-                }
-                if(-endX < screenX/2){
-                    scroll.scrollTo(0, 0, 300)
                 }else {
-                    scroll.scrollTo(-screenX, 0, 300)
+                    
+                    if(-endX < screenX/2){
+                        Velocity(line, {
+                            translateX: 0,
+                            scaleX: 1
+                        }, 200)
+                        scroll.scrollTo(0, 0, 300)
+                    }else {
+                        Velocity(line, {
+                            translateX: lineArea,
+                            scaleX: 2
+                        }, 200)
+                        scroll.scrollTo(-screenX, 0, 300)
+                    }
                 }
+                
+                moveflag = false
             })
         },
         blur(){
@@ -170,9 +220,12 @@ export default {
                 color: #333333
         .line
             position: absolute
+            left: 267px
+            top: 95px
             width: 86px
             height: 6px
             background : #0096ff
+            // transform: translateX(621px) scaleX(2)
             border-radius: 4px
      .eleme-bd
         position: absolute
