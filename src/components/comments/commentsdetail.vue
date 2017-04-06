@@ -1,0 +1,55 @@
+<template>
+    <section class="comments-detail" v-scroll>
+        <comments :resInfo="resInfo" class="ratings-wrapper"></comments>
+        <div class="category-head-wrapper">
+            <category-head  @close="returnToSeller" head-desc="评价"></category-head>
+        </div>
+    </section>
+</template>
+<script>
+    import categoryhead from "../categoryhead/categoryhead"
+    import comments from "../comments/comments"
+    export default {
+       props: {
+           resInfo: {
+               type: Object,
+               defalut(){
+                   return {}
+               }
+           }
+       },
+       methods: {
+           returnToSeller (){
+               this.$emit('from-comments')
+           }
+       },
+       components: {
+           "category-head": categoryhead,
+           comments
+       }
+    }
+</script>
+<style lang="stylus" scoped>
+    .comments-detail
+        position: fixed
+        left: 0
+        top: 0
+        right: 0
+        bottom: 0
+        background: #f5f5f5
+        .return-back
+            postition: absolute
+            left: 10px
+            top: 10px
+            .icon
+                font-size: 60px
+        .category-head-wrapper
+            position: absolute
+            width: 100%
+            left: 0
+            top: 0
+        .ratings-wrapper
+            padding-top: 138px
+            width: 200%
+            box-sizing: border-box
+</style>

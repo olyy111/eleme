@@ -1,42 +1,41 @@
 <template>
-    <div class="comments-wrapper" v-scroll>
-        <div class="comments">
-            <div class="star-wrapper">
-                <div class="summary">
-                    <h4 class="score hlight">4.2</h4>
-                    <p class="desc"> 综合评分  </p>
-                    <p class="compare">低于周边商家100%</p>
-                </div>
-                <div class="detail">
-                    <div class="dist">
-                        <strong class="desc">服务态度</strong>
-                        <star :score="resInfo.seller&&resInfo.seller.serviceScore"></star>
-                        <span class="score hlight">{{resInfo.seller&&resInfo.seller.serviceScore}}</span>
-                    </div>
-                    
-                    <div class="dist">
-                        <strong class="desc">商品评分</strong>
-                        <star :score="resInfo.seller&&resInfo.seller.foodScore"></star>
-                        <span class="score hlight">{{resInfo.seller&&resInfo.seller.foodScore}}</span>
-                    </div>
-                    
-                    <p class="delivery-time">
-                        <span class="title">
-                            送达时间
-                        </span><span class="time">
-                            32分钟
-                        </span>
-                    </p>
-                </div>
+    <div class="comments">
+        <div class="star-wrapper">
+            <div class="summary">
+                <h4 class="score hlight">4.2</h4>
+                <p class="desc"> 综合评分  </p>
+                <p class="compare">低于周边商家100%</p>
             </div>
-            <divsion-bar></divsion-bar>
-            <category-comments :categoryDesc="categoryDesc">
+            <div class="detail">
+                <div class="dist">
+                    <strong class="desc">服务态度</strong>
+                    <star :score="resInfo.seller&&resInfo.seller.serviceScore"></star>
+                    <span class="score hlight">{{resInfo.seller&&resInfo.seller.serviceScore}}</span>
+                </div>
+                
+                <div class="dist">
+                    <strong class="desc">商品评分</strong>
+                    <star :score="resInfo.seller&&resInfo.seller.foodScore"></star>
+                    <span class="score hlight">{{resInfo.seller&&resInfo.seller.foodScore}}</span>
+                </div>
+                
+                <p class="delivery-time">
+                    <span class="title">
+                        送达时间
+                    </span><span class="time">
+                        32分钟
+                    </span>
+                </p>
+            </div>
+        </div>
+        <divsion-bar></divsion-bar>
+        <category-comments :categoryDesc="categoryDesc">
 
-            </category-comments>
+        </category-comments>
+        <div class="ratings-wrapper">
             <ratings :ratings="resInfo.ratings"></ratings>
         </div>
-    </div>
-    
+    </div> 
 </template>
 <script>
     import divisionbar from "../divisionbar/divisionbar"
@@ -70,9 +69,7 @@
 </script>
 <style lang="stylus" scoped>
     .comments
-        float: left
-        width: 50%
-        height: 100%
+        background: #fff
         .star-wrapper
             display: flex
             padding-top: 36px

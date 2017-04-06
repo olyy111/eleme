@@ -16,7 +16,7 @@
                     {{seller.bulletin|wordsLengthLimit}}
                 </p>
             </div>
-            <div class="seller-detail-turn">
+            <div class="seller-detail-turn" v-tap="{methods: goSellerDetail}">
                 <i class="icon-keyboard_arrow_right"></i>
             </div>
         </div>
@@ -57,6 +57,9 @@
                             
         },
         methods: {
+            goSellerDetail(){
+                this.$emit('show-detail')
+            },
             sureClass(typeNum){
                 var rsClass = ''
                 switch (typeNum) {
@@ -104,7 +107,7 @@
         }
     }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
     @import '../../common/css/tools.stylus'
     @import '../../common/stylus/mixin'
     .hd 
@@ -148,10 +151,7 @@
             align-self: center
             margin-top: -100px
             i 
-                font-family: "sell-icon"
-
-             
-
+                font-size: 100px
     .bcg 
         position: absolute
         z-index: -1

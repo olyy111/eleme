@@ -60,7 +60,7 @@
             </div>
             <transition name="comments-slide">
                 <div class="comments-wrapper" v-show="isShowComments">
-                    <category-head @close-comments="closeComments"></category-head>
+                    <category-head @close="closeComments"></category-head>
                     <category-comments :category-desc="categoryDesc"></category-comments>
                     <ratings :ratings="food.ratings" class="border"></ratings>
                 </div>

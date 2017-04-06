@@ -1,32 +1,37 @@
 <template>
-    <div class="ratings-wrap" v-scroll>
-        <ul class="rating-list">
-            <li v-for="rating in selectedComments" class="rating-item">
-                <div class="avatar-wrap">
-                    <img :src="rating.avatar">
+    <ul class="rating-list">
+        <li v-for="rating in selectedComments" class="rating-item">
+            <div class="avatar-wrap">
+                <img :src="rating.avatar">
+            </div>
+            <div class="rating-info">
+                <header class="head">
+                    <span class="name">{{rating.username}}</span>
+                    <span class="time">{{rating.rateTime|formatDate}}</span>
+                </header>
+                <div class="star-wrapper">
+                    <star :score="rating.score"></star>
                 </div>
-                <div class="rating-info">
-                    <header class="head">
-                        <span class="name">{{rating.username}}</span>
-                        <span class="time">{{rating.rateTime|formatDate}}</span>
-                    </header>
-                    <div class="star-wrapper">
-                        <star :score="rating.score"></star>
-                    </div>
-                    <div class="rating-content">
-                        <span class="icon-wrap">
-                            <i class="icon-thumb_up" v-if="rating.rateType === 0"></i>
-                            <i class="icon-thumb_down" v-if="rating.rateType === 1"></i>
-                        </span>
-                        <p class="text">
-                            {{rating.text}}
-                        </p>
-                    </div>
+                <div class="rating-content">
+                    
+                    <p class="text">
+                        {{rating.text}}
+                    </p>
                 </div>
-            </li>
-        </ul>
-    </div>
+                <div class="ratings-tags">
+                    <i class="icon-thumb_up" v-if="rating.rateType === 0"></i>
+                    <span class="tags" v-for="recommend in rating.recommend">
+                        {{recommend}}
+                    </span>
+                </div>
+            </div>
+        </li>
+    </ul>
     
+    <!--<span class="icon-wrap">
+        <i class="icon-thumb_up" v-if="rating.rateType === 0"></i>
+        <i class="icon-thumb_down" v-if="rating.rateType === 1"></i>
+    </span>-->
 </template>
 <script>
     import star from "../star/star"
@@ -100,7 +105,7 @@
         background: #fff
         .rating-item
             width: 100%
-            border-top: 1px solid #f5f5f5
+            border-bottom: 1px solid #f5f5f5
             display: flex
             padding: 40px 0
             .avatar-wrap
@@ -134,7 +139,20 @@
                             color: #999999
                     .text
                         flex: 1
-
+                .ratings-tags
+                    margin-top: 35px
+                    .icon-thumb_up
+                        font-size: 44px
+                        color: #ff6000
+                    .tags
+                        display: inline-block
+                        padding: 0 16px
+                        margin-right: 10px
+                        font-size: 34px
+                        line-height: 64px
+                        border: 1px solid #dddddd
+                        border-radius: 8px
+                        color: #999999
                         
                 
 </style>

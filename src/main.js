@@ -24,6 +24,7 @@ var store = new Vuex.Store({
     }
   },
   mutations: {
+      
       getAllProducts(state, products){
           state.allProcuts
       },

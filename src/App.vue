@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <section class="app-inner"  :style="blurBcg" >
-        <eleme-header :seller="seller">
+        <eleme-header :seller="seller" @show-detail="showDetail">
         </eleme-header>
         <section class="eleme-bd" >
             <div class="eleme-nav">
@@ -17,13 +17,30 @@
             <section class="content-wrap" v-scroll="{method:scrollFn, opts:scrollOpts}">
                 <section class="content"  ref="scrollWrap">
                     <eleme-goods :resInfo="resInfo" ref="goods"></eleme-goods>
-                    <eleme-comments :resInfo="resInfo" ref="comments"></eleme-comments>
+                    <div class="app-comments-wrapper" v-scroll>
+                        <eleme-comments :resInfo="resInfo" ref="comments"></eleme-comments>
+                    </div>
                 </section>
             </section>
-            
         </section>
     </section>
-    <food :is-show-detail="isBlur"  @appblur="blur"></food>
+    <food :is-show-detail="isBlur" @appblur="blur"></food>
+    <transition name="seller-detail">
+        <seller-detail 
+            v-show="isShowSellerDetail" 
+            :seller="resInfo.seller"
+            :ratings="resInfo.ratings"
+            @return-back="returnBack"
+            @show-com-detail="showComDetail">
+        </seller-detail>
+    </transition>
+    <transition name="comments-detail">
+        <comments-detail 
+            v-show="isShowComDetail" 
+            :resInfo="resInfo"
+            @from-comments="hideComments">
+        </comments-detail>
+    </transition>
     <shop-cart :resInfo="resInfo" :shop-cart="shopCart"></shop-cart>
     <transition name="mask" >
         <div class="mask" 
@@ -40,7 +57,9 @@ import axios from 'axios'
 import header from "./components/header/header"
 import goods from "./components/goods/goods"
 import comments from "./components/comments/comments"
+import commentsdetail from "./components/comments/commentsdetail"
 import shopcart from "./components/shopcart/shopcart"
+import sellerdetail from "./components/sellerdetail/sellerdetail"
 import BScroll from "better-scroll"
 import food from "./components/food/food"
 import Velocity from "velocity-animate"
@@ -63,7 +82,9 @@ export default {
                 momentum: false
             },
             scroll: {},
-            screenX: 0
+            screenX: 0,
+            isShowSellerDetail: false,
+            isShowComDetail:false
         }
     },
     created(){
@@ -79,12 +100,23 @@ export default {
         
     },
     methods: {
+        hideComments(){
+            this.isShowComDetail = !this.isShowComDetail
+        },
+        showComDetail(){
+            this.isShowComDetail = !this.isShowComDetail
+        },
+        returnBack(){
+            this.isShowSellerDetail = !this.isShowSellerDetail   
+        },
+        showDetail(){
+            this.isShowSellerDetail = !this.isShowSellerDetail
+        },
         moveToComments(){
             Velocity(this.$refs.line, {
                 translateX: this.screenX/2,
                 scaleX: 2
             }, 200)
-            console.log(this.scroll)
             this.scroll.scrollTo(-this.screenX, 0, 300)
         },
         moveToGoods(){
@@ -111,7 +143,6 @@ export default {
                 oriTime = +new Date()
             })
             scroll.on('scroll', (pos) => {
-                console.log(11111)
                 line.style.transform = "translateX("+ Math.abs(pos.x)/2 +"px) scaleX("+ (Math.abs(pos.x)/screenX + 1) +")"    
             })
             scroll.on('scrollEnd', () => {
@@ -185,7 +216,9 @@ export default {
         "eleme-goods": goods,
         "eleme-comments": comments,
         "food": food,
-        'shop-cart': shopcart
+        'shop-cart': shopcart,
+        "seller-detail": sellerdetail,
+        "comments-detail": commentsdetail
     }
 }
 </script>
@@ -252,4 +285,20 @@ export default {
             transition: .3s linear
             &.mask-enter, &.mask-leave-active
                 opacity: 0
+      .seller-detail
+            transition: .3s linear
+            &.seller-detail-enter, &.seller-detail-leave-active
+                transform: translate3d(100%, 0, 0)
+      .comments-detail
+            transition: .3s linear
+            &.comments-detail-enter, &.comments-detail-leave-active
+                transform: translate3d(100%, 0, 0)
+      .app-comments-wrapper
+            float: left
+            overflow: hidden
+            height: 100%
+            width: 50%
+            padding-bottom: 144px
+            box-sizing: border-box
+            background: #f5f5f5
 </style>
