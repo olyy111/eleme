@@ -9,20 +9,19 @@
       //适配
         document.addEventListener('DOMContentLoaded', function (){
             var viewportEl = document.createElement('meta'),
-                scale = 1/window.devicePixelRatio;
+                scale = 1/window.devicePixelRatio,
+                meta = document.head.querySelector('meta')
 
             viewportEl.name = "viewport";
             viewportEl.content = "width=device-width, initial-scale="+ scale +", maximum-scale="+ scale +", minimum-scale="+ scale +", user-scalable=no";
-            document.head.appendChild(viewportEl);
+            document.head.insertBefore(viewportEl, meta);
 
             var h = window.innerWidth;
-            document.documentElement.style.fontSize = h/15 + 'px';
+            document.documentElement.style.fontSize = h/62.1 + 'px';
         })
-      //阻止浏览器默认行为
+    //  阻止浏览器默认行为
         document.addEventListener('touchstart',function (ev){
             ev.preventDefault()
-        }, {
-            passive: false
         })
     </script>
 

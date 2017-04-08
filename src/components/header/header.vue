@@ -16,7 +16,7 @@
                     {{seller.bulletin|wordsLengthLimit}}
                 </p>
             </div>
-            <div class="seller-detail-turn">
+            <div class="seller-detail-turn" v-tap="{methods: goSellerDetail}">
                 <i class="icon-keyboard_arrow_right"></i>
             </div>
         </div>
@@ -57,6 +57,9 @@
                             
         },
         methods: {
+            goSellerDetail(){
+                this.$emit('show-detail')
+            },
             sureClass(typeNum){
                 var rsClass = ''
                 switch (typeNum) {
@@ -104,54 +107,51 @@
         }
     }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
     @import '../../common/css/tools.stylus'
     @import '../../common/stylus/mixin'
     .hd 
         position: relative
-        padding: 0 45px
+        padding: 0 (45rem/20)
         box-sizing: border-box
         color: #fff
         background-color: rgba(7,17,27,0.5)
         background-size: 100% 100%
         overflow: hidden
     .turn
-        padding: 39px 0
+        padding: (39rem/20) 0
     .seller-info
-
         position: relative
         display: flex
         flex-direction: row
         justify-content: space-between
-        margin-bottom: 40px
+        margin-bottom: (49rem/20)
         .title
-            font-size: 48px
-            line-height: 88px
+            font-size: (48rem/20)
+            line-height: (88rem/20)
         .avatar
-            width: 240px
-            height: 240px
-            margin-right: 47px
+            width: (240rem/20)
+            height: (240rem/20)
+            margin-right: (47rem/20)
             font-weight: bold
             img 
                 width: 100%
                 height: 100%
+                border-radius: (10rem/20)
         .intro 
-            margin-left: -30px  
+            margin-left: -(30rem/20) 
         .des 
-            font-size: 36px
-            line-height: 44px   
-            margin-bottom: 43px
+            font-size: (36rem/20)
+            line-height: (44rem/20)   
+            margin-bottom: (43rem/20)
         .notice 
-            font-size: 36px
-            line-height: 65px 
+            font-size: (36rem/20)
+            line-height: (65rem/20) 
         .seller-detail-turn
             align-self: center
-            margin-top: -100px
+            margin-top: -(100rem/20)
             i 
-                font-family: "sell-icon"
-
-             
-
+                font-size: (100rem/20)
     .bcg 
         position: absolute
         z-index: -1
@@ -164,23 +164,25 @@
             width: 100%
             height: 100%
     .activity-wrapper
-        height: 54px
+        height: (54rem/20)
         display: flex
         flex-direction: row
         justify-content: space-between
-        padding-bottom: 8px
-        font-size: 32px
+        padding-bottom: (8rem/20)
+        font-size: (32rem/20)
         transition: 1s
         .activity-item 
             position:relative
-            line-height: 54px 
-            padding-left: 52px
+            line-height: (54rem/20)
+            padding-left: (52rem/20)
             .activity-item-icon
                 position: absolute
-                width: 39px
-                height: 39px
+                width: (39rem/20)
+                height: (39rem/20)
                 left: 0
-                top: 8px
+                top: (8rem/20)
+                background-size: 100% 100%
+                border-radius: (5rem/20)
                 &.decrease_1 
                     bg-image("decrease_1")
                 &.discount_1 
@@ -193,9 +195,14 @@
                     bg-image("guarantee_1")
             
         .activity-count
+            padding: (40rem/20) 0 0 (40rem/20)
+            margin: -(40rem/20) 0 0 -(40rem/20)
             .icon-keyboard_arrow_right
+                display: inline-block
                 font-family: "sell-icon"
-                font-size: 40px
+                font-size: (40rem/20)
+                vertical-align: top
+                
         .hidden
             overflow: hidden
     
