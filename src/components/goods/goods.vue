@@ -58,9 +58,6 @@
             </div>
         </div>
         <shop-cart :resInfo="resInfo" ref="shopCart"></shop-cart>
-    </div> 
-        
-        
     </div>
 </template>
 
@@ -76,6 +73,8 @@
             resInfo: Object
         },
         created() {
+
+            //渲染dom完毕获取各区块的盒模型数值用作动画
             this.$nextTick(() => {
                 axios.get('static/data.json').then((res) => {
                     this.$nextTick(() => {
@@ -93,6 +92,7 @@
                 sideScroll: {},
                 isParMove: true,
                 isFoodShow: false,
+                sideNotMove: false, //如果是点击sidebar的区块， 不会自动校正位置
                 shopCart: {},
                 sideEl: {
                     wrapperHeight: 0,
@@ -110,8 +110,7 @@
                     click: true,
                     probeType: 3,
                     directionLockThreshold: 1
-                },
-                sideNotMove: false //如果是点击sidebar的区块， 不会自动校正位置
+                }    
             }
         },
         computed: {
@@ -125,6 +124,7 @@
             "food": food
         },
         watch: {
+            //自动校正侧边栏 当前所属分类位置
             activeIndex() {
                 if(this.sideNotMove){
                     return
@@ -203,7 +203,7 @@
         }
     }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
     .goods
         position: relative
         height: 100%
@@ -212,37 +212,37 @@
         display: flex
         flex-direction: row
         .sidebar-wrapper
-            width: 240px
+            width: (240rem/20)
             height: 100%
             overflow: hidden
             .sidebar
-                padding-bottom: 144px
+                padding-bottom: (144rem/20)
             .item
                 position: relative
                 display: flex
-                border-left: 10px solid #f8f8f8
-                padding: 60px 0 60px 32px
+                padding: (60rem/20) 0 (60rem/20) (32rem/20)
+                border-left: (10rem/20) solid #f8f8f8
+                border-bottom: (1rem/20) solid #eaeaea
                 background-color: #f8f8f8 
-                border-bottom: 1px solid #eaeaea
                 .item-text
-                    font-size: 40px
+                    font-size: (40rem/20)
                 .item-count
                     position: absolute
-                    right: 15px
-                    top: 9px
-                    width: 51px
-                    height: 36px
-                    font-size: 30px
-                    line-height: 36px
+                    right: (15rem/20)
+                    top: (9rem/20)
+                    width: (51rem/20)
+                    height: (36rem/20)
+                    font-size: (30rem/20)
+                    line-height: (36rem/20)
                     color: #fff
                     text-align: center
-                    border-radius: 18px
+                    border-radius: (18rem/20)
                     background-color: #ff461d
             .active
-                border-left: 10px solid #3190e8
+                border-left: (10rem/20) solid #3190e8
                 background-color: #ffffff
         .foods-wrapper
-            width: 1002px
+            width: (1002rem/20)
             height: 100%
             overflow: hidden
     .kind-list-item
@@ -256,21 +256,21 @@
         flex-direction: row
         align-items: center
         justify-content: flex-start
-        height: 78px
-        border-left: 9px solid #eeeeee
-        padding-left: 26px
+        height: (78rem/20)
+        padding-left: (26rem/20)
+        border-left: (9rem/20) solid #eeeeee
         background-color: #f8f8f8
         .kind-title
-            margin-right: 15px
-            font-size: 40px
+            margin-right: (15rem/20)
+            font-size: (40rem/20)
             font-weight: bold
             color: #666666
         .kind-title-text
-            font-size: 34px
+            font-size: (34rem/20)
             color: #999999
     .kind-list-item
         position: relative
-        padding: 42px 30px 0 42px
+        padding: (42rem/20) (30rem/20) 0 (42rem/20)
         .layout-click
             position: absolute
             left: 0
@@ -279,53 +279,53 @@
             height: 100%
             opacity: 0
         .food-avatar-wrap
-            width: 171px
-            height: 171px
+            width: (171rem/20)
+            height: (171rem/20)
             background: red
-            margin-right: 30px
+            margin-right: (30rem/20)
     .food-intro
         flex-shrink: 1
         .food-name
-            width: 545px
-            margin-bottom: 17px
-            font-size: 46px
-            line-height: 46px
+            width: (545rem/20)
+            margin-bottom: (17rem/20)
+            font-size: (46rem/20)
+            line-height: (46rem/20)
             color: #333333
             font-weight: bold
         .food-remark
-            width: 700px
-            line-height: 63px
-            font-size: 32px
+            width: (700rem/20)
+            line-height: (63rem/20)
+            font-size: (32rem/20)
             color:#999999
         .food-addition
-            line-height: 63px
-            font-size: 32px
+            line-height: (63rem/20)
+            font-size: (32rem/20)
             color: #666666
         .price
             display: flex
             position: relative
             align-items: flex-end
-            margin-top: 8px
-            padding-bottom: 17px
-            height: 70px
+            margin-top: (8rem/20)
+            padding-bottom: (17rem/20)
+            height: (70rem/20)
             box-sizing: border-box
             .price-new
                 font-size: 0
-                margin-right: 10px
+                margin-right: (10rem/20)
                 .sign
-                    font-size: 28px
+                    font-size: (28rem/20)
                     font-family: arial
-                    line-height: 40px
+                    line-height: (40rem/20)
                 .num
-                    font-size: 50px
+                    font-size: (50rem/20)
                     font-family: arial
                     font-weight: bold
              .price-old
                 color: #dddddd
                 text-decoration: line-through
-                font-size: 36px
+                font-size: (36rem/20)
                 font-family: arial
-                line-height: 52px
+                line-height: (52rem/20)
     .add-pos
         position: absolute
         right: 0

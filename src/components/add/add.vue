@@ -44,8 +44,8 @@
             display: inline-block
             .reduce
                 display: inline-block
-                padding: 20px
-                font-size: 80px
+                padding: (20rem/20)
+                font-size: (80rem/20)
                 color: #3190e8
         .add-wrapper
             display: inline-block
@@ -53,12 +53,12 @@
                 display: inline-block
                 right: 0
                 color: #3190e8
-                font-size: 80px
-                padding: 20px
+                font-size: (80rem/20)
+                padding: (20rem/20)
         .counter
             display: inline-block
-            font-size: 34px
-            vertical-align: 20px
+            font-size: (34rem/20)
+            vertical-align: (20rem/20)
         .slide-enter-active, .slide-leave-active 
             transition: all .3s ease
             transform: translate3d(0, 0, 0)
@@ -66,7 +66,7 @@
                 transform: rotate(0)
                 transition: all .3s ease
         .slide-enter, .slide-leave-active 
-            transform: translate3d(130px, 0, 0)
+            transform: translate3d((130rem/20), 0, 0)
             .reduce
                 transform: rotate(180deg)
                 opacity: 0

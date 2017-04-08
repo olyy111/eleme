@@ -188,123 +188,123 @@
         .seller-detail-inner
             position: absolute
             width: 100%
-            padding-top: 138px
-            padding-bottom: 144px
+            padding-top: (138rem/20)
+            padding-bottom: (144rem/20)
             left: 0
             top: 0
             background: #fff
         .seller-head
-            padding: 45px 60px
+            padding: (45rem/20) (60rem/20)
             .seller-profile
                 display: flex
-                height: 225px
-                margin-bottom: 30px
+                height: (225rem/20)
+                margin-bottom: (30rem/20)
                 .seller-avatar-wrap
-                    margin-right: 32px
+                    margin-right: (32rem/20)
                 .seller-avatar
-                    width: 225px
-                    height: 225px
-                    border-radius: 8px
+                    width: (225rem/20)
+                    height: (225rem/20)
+                    border-radius: (8rem/20)
                 .seller-info
                     flex: 1
                 .seller-title
-                    font-size: 48px
+                    font-size: (48rem/20)
                     font-weight: 700
-                    line-height: 93px
+                    line-height: (93rem/20)
                     color: #363636
                 .seller-star
                 .seller-score
                     display: inline-block
                     vertical-align: top
-                    font-size: 36px
+                    font-size: (36rem/20)
                 .month-amount
                     display: inline-block
                     vertical-align: top
-                    font-size: 34px
+                    font-size: (34rem/20)
                     color: #666
                 .seller-delivery
-                    font-size: 34px
+                    font-size: (34rem/20)
                     span
                         display: inline-block
-                        width: 3px
-                        height: 26px
-                        border-left: 3px solid #ccc
+                        width: (3rem/20)
+                        height: (26rem/20)
+                        border-left: (3rem/20) solid #ccc
             .seller-bulletin
-                padding: 30px
+                padding: (30rem/20)
                 background: #f8f8f8
-                font-size: 34px
-                line-height: 50px
+                font-size: (34rem/20)
+                line-height: (50rem/20)
                 color: #666
                 .delivery-fee
-                    padding-bottom: 22px
-                    border-bottom: 1px solid #e6e6e6
+                    padding-bottom: (22rem/20)
+                    border-bottom: (1rem/20) solid #e6e6e6
                 .seller-bulletin-inner
-                    padding-top: 15px
+                    padding-top: (15rem/20)
         .comments-protal-head
-            height: 132px
-            padding: 0 60px
-            border-bottom: 1px solid #f5f5f5
+            height: (132rem/20)
+            padding: 0 (60rem/20)
+            border-bottom: (1rem/20) solid #f5f5f5
             .comments-protal-score
                 float: left
                 color: #ff6000
-                font-size: 42px
-                line-height: 130px
+                font-size: (42rem/20)
+                line-height: (130rem/20)
                 span
                     font-weight: 700
             .comments-protal-desc
                 float: left
-                line-height: 132px
-                font-size: 40px
+                line-height: (132rem/20)
+                font-size: (40rem/20)
                 color: #333333
             .comments-protal-amount
                 float: right
-                font-size: 40px
+                font-size: (40rem/20)
                 color: #999999
                 .icon-keyboard_arrow_right
                     display: inline-block
                     vertical-align: top
-                    margin-top: 18px
-                    margin-left: -20px
-                    font-size: 80px
+                    margin-top: (18rem/20)
+                    margin-left: -(20rem/20)
+                    font-size: (80rem/20)
                 .comments-protal-num
                     display: inline-block
                     vertical-align: top
-                    margin-top: 34px
+                    margin-top: (34rem/20)
         .comments-all
-            height: 130px
+            height: (130rem/20)
             text-align: center
-            font-size: 40px
+            font-size: (40rem/20)
             color: #999
-            line-height: 130px
+            line-height: (130rem/20)
             .icon-keyboard_arrow_right
                 display: inline-block
                 vertical-align: top
-                margin-top: 26px
-                font-size: 80px
+                margin-top: (26rem/20)
+                font-size: (80rem/20)
     .seller-service
-        padding-left: 60px
-        padding-bottom: 20px
+        padding-left: (60rem/20)
+        padding-bottom: (20rem/20)
         header
-            font-size: 46px
-            line-height: 133px
+            font-size: (46rem/20)
+            line-height: (133rem/20)
             color: #333333
     .activity-wrapper
-        padding-bottom: 8px
-        font-size: 42px
+        padding-bottom: (8rem/20)
+        font-size: (42rem/20)
         .activity-item 
             position:relative
-            line-height: 94px
-            height: 94px
+            line-height: (94rem/20)
+            height: (94rem/20)
             overflow: hidden 
-            padding-left: 61px
+            padding-left: (61rem/20)
             .activity-item-icon
                 position: absolute
-                width: 55px
-                height: 55px
+                width: (55rem/20)
+                height: (55rem/20)
                 left: 0
-                top: 20px
+                top: (20rem/20)
                 background-size: 100% 100%
-                border-radius: 5px
+                border-radius: (5rem/20)
                 &.decrease_2 
                     bg-image("decrease_2")
                 &.discount_2 
@@ -316,34 +316,34 @@
                 &.guarantee_2 
                     bg-image("guarantee_2")
     .shop-scene
-        padding-left: 60px
-        padding-bottom: 31px
+        padding-left: (60rem/20)
+        padding-bottom: (31rem/20)
         header
-            height: 133px
-            line-height: 133px
+            height: (133rem/20)
+            line-height: (133rem/20)
             color: #333333
             font-size: 46px
-            border-bottom: 1px solid #f5f5f5
+            border-bottom: (1rem/20) solid #f5f5f5
         .scene-list
-            padding-top: 32px
+            padding-top: (32rem/20)
             .scene-list-item
                 float: left
-                margin-right: 15px
+                margin-right: (15rem/20)
                 img
-                    width: 276px
-                    height: 276px
-                    border-radius: 5px
+                    width: (276rem/20)
+                    height: (276rem/20)
+                    border-radius: (5rem/20)
     .seller-foot
-        padding-left: 60px
+        padding-left: (60rem/20)
         header
-            height: 133px
-            line-height: 133px
-            font-size: 46px
+            height: (133rem/20)
+            line-height: (133rem/20)
+            font-size: (46rem/20)
             color: #333
-            border-bottom: 1px solid #f5f5f5
+            border-bottom: (1rem/20) solid #f5f5f5
         .seller-foot-item
-            line-height: 134px
-            font-size: 46px
+            line-height: (134rem/20)
+            font-size: (46rem/20)
             color: #666
-            border-bottom: 1px solid #f5f5f5
+            border-bottom: (1rem/20) solid #f5f5f5
 </style>

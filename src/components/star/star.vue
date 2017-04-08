@@ -37,15 +37,15 @@
 </script>
 <style lang="stylus" scoped>
     .star
-        height: 38px
-        line-height: 38px
+        height: (38rem/20)
+        line-height: (38rem/20)
         display: inline-block
         vertical-align: top
         .icon
             display: inline-block
             vertical-align: top
-            width: 34px
-            height: 34px
+            width: (34rem/20)
+            height: (34rem/20)
             background-size: 100% 100%
             &.on
                 background-image: url("img/star36_on@3x.png")

@@ -39,17 +39,17 @@
         background: #f5f5f5
         .return-back
             postition: absolute
-            left: 10px
-            top: 10px
+            left: (10rem/20)
+            top: (10rem/20)
             .icon
-                font-size: 60px
+                font-size: (60rem/20)
         .category-head-wrapper
             position: absolute
             width: 100%
             left: 0
             top: 0
         .ratings-wrapper
-            padding-top: 138px
+            padding-top: (138rem/20)
             width: 200%
             box-sizing: border-box
 </style>

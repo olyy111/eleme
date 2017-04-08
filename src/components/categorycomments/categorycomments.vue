@@ -67,23 +67,23 @@
 </script>
 <style lang="stylus" scoped>
     .category-comments
-        padding: 30px 30px 20px 60px
-        font-size: 40px
+        padding: (30rem/20) (30rem/20) (20rem/20) (60rem/20)
+        font-size: (40rem/20)
         background: #fff
         .tags
             display: flex
             justify-content: flex-start
             flex-wrap: wrap
-            padding-bottom: 30px
-            border-bottom: 1px dashed #eeeeee
+            padding-bottom: (30rem/20)
+            border-bottom: (1rem/20) dashed #eeeeee
             .tag
-                padding: 0 40px
-                margin-bottom: 30px
-                margin-right: 20px
-                line-height: 92px
+                padding: 0 (40rem/20)
+                margin-bottom: (30rem/20)
+                margin-right: (20rem/20)
+                line-height: (92rem/20)
                 color: #6d7885
                 background: #ebf5ff
-                border-radius: 18px
+                border-radius: (18rem/20)
                 &.bad
                     color: #aaaaaa
                     background: #f5f5f5
@@ -92,11 +92,11 @@
                     background: #0096ff
         .content-toggle
             color: #666
-            line-height: 100px
+            line-height: (100rem/20)
             .icon
                 display: inline-block
-                font-size: 60px
-                vertical-align: -10px
+                font-size: (60rem/20)
+                vertical-align: -(10rem/20)
                 &.active
                     color: #4cd964
 

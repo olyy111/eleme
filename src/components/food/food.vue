@@ -327,42 +327,42 @@
         .content
             width: 100%
             padding-top: 100%
-            padding-bottom: 144px
+            padding-bottom: (144rem/20)
             transition: .3s
             background: #f5f5f5
             &.content-enter, &.content-leave-active
-                transform: translate3d(0, 100px, 0)
+                transform: translate3d(0, (100rem/20), 0)
             &.content-leave-active
                 opacity: 0
             .ratings-wrapper
-                margin-top: 390px
-                padding-left: 60px
+                margin-top: (390rem/20)
+                padding-left: (60rem/20)
                 background: #fff
                 .ratings-head
-                    height: 130px
-                    padding-right: 60px
-                    line-height: 130px
+                    height: (130rem/20)
+                    padding-right: (60rem/20)
+                    line-height: (130rem/20)
                     color: #000
                     .title
                         float: left
-                        font-size: 46px
-                        margin-right: 4px
+                        font-size: (46rem/20)
+                        margin-right: (4rem/20)
                     .percent
                         float: left
-                        line-height: 136px
-                        font-size: 38px
+                        line-height: (136rem/20)
+                        font-size: (38rem/20)
                     .rating-count
                         float: right
-                        font-size: 40px
+                        font-size: (40rem/20)
                         color: #9e9e9e
                         .icon-keyboard_arrow_right
-                            font-size: 60px
-                            vertical-align: -12px
+                            font-size: (60rem/20)
+                            vertical-align: -(12rem/20)
     .food
         z-index: 100
         width: (1060rem/20)
         height: (1390rem/20)
-        border-radius: 18px
+        border-radius: (18rem/20)
         overflow: hidden
         &.foodShow-leave-active
             opacity: 0
@@ -374,69 +374,69 @@
             background-size: cover
             background-position: center center
         .profile-wrapper
-            height 360px
-            background #fff
+            height: (360rem/20)
+            background: #fff
             .info
-                position relative
-                box-sizing border-box
-                width 100%
-                height 100%
-                padding 40px 60px
-                background #fff
-                box-sizing border-box
+                position: relative
+                box-sizing: border-box
+                width: 100%
+                height: 100%
+                padding: (40rem/20) (60rem/20)
+                background: #fff
+                box-sizing: border-box
                 .title
-                    font-size 46px
-                    font-weight 700
-                    color rgb(7,17,27)
-                    line-height 46px
+                    font-size: (46rem/20)
+                    font-weight: 700
+                    color: rgb(7,17,27)
+                    line-height: (46rem/20)
                 .desc
-                    display flex
-                    padding 0
-                    padding-top 30px
-                    font-size 38px
-                    color rgb(147,153,159)
-                    line-height 38px
+                    display: flex
+                    padding: 0
+                    padding-top: (30rem/20)
+                    font-size: (38rem/20)
+                    color: rgb(147,153,159)
+                    line-height: (38rem/20)
                     span:last-child
-                        padding-left 12px
+                        padding-left (12rem/20)
                 .price
-                    display flex
-                    padding-top 90px
-                    font-size 14px
-                    font-weight 700
-                    color rgb(240,20,20)
-                    line-height 24px
+                    display: flex
+                    padding-top: (90rem/20)
+                    font-size: (14rem/20)
+                    font-weight: 700
+                    color: rgb(240,20,20)
+                    line-height: (24rem/20)
                     .unit
-                        font-size 50px
-                        font-weight normal
+                        font-size: (50rem/20)
+                        font-weight: normal
                     .oldPrice
-                        padding-left 12px
-                        font-size 38px
-                        font-weight normal
+                        padding-left: (12rem/20)
+                        font-size: (38rem/20)
+                        font-weight: normal
                         text-decoration: line-through
-                        color rgb(147,153,159)
+                        color: rgb(147,153,159)
                 .shopCart
-                    position absolute
-                    right 30px
-                    bottom 70px
-                    height 66px
-                    text-align center
-                    z-index 2
+                    position: absolute
+                    right: (30rem/20)
+                    bottom: (70rem/20)
+                    height: (66rem/20)
+                    text-align: center
+                    z-index: 2
                     .text
-                        box-sizing border-box
-                        height 100%
-                        line-height 66px
-                        color white
-                        font-size 38px
-                        padding 0 32px
-                        border-radius 30px
-                        background rgb(0,160,220)
+                        box-sizing: border-box
+                        height: 100%
+                        line-height: (66rem/20)
+                        color: white
+                        font-size: (38rem/20)
+                        padding: 0 (32rem/20)
+                        border-radius: (30rem/20)
+                        background: rgb(0,160,220)
                         transition: .3s linear
                         &.fade-enter, &.fade-leave-active
                             opacity: 0
                     .add-cart-wrapper
-                        position: absolute;
-                        top: -27px;
-                        right: -22px;
+                        position: absolute
+                        top: -(27rem/20)
+                        right: -(22rem/20)
     .comments-wrapper
         position: fixed
         z-index: 110

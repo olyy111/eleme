@@ -253,8 +253,8 @@
   z-index: 50;
   left: 0;
   bottom: 0;
-  width: 1242px;
-  height: 144px;
+  width: (1242rem/20);
+  height: (144rem/20);
 .shopCart
   position relative
   z-index 50
@@ -266,19 +266,19 @@
     background rgba(20, 29, 39, .9)
     .content-left
       flex 1
-      height 144px
+      height (144rem/20)
       .logo-wrapper
         display inline-block
         vertical-align top
         position: relative
-        height: 170px
-        line-height: 170px
+        height: (170rem/20)
+        line-height: (170rem/20)
         border-radius: 50%
-        width: 170px
-        top: -30px
+        width: (170rem/20)
+        top: -(30rem/20)
         background: #141d27
-        margin:0 15px 0 35px
-        padding 14px
+        margin:0 (15rem/20) 0 (35rem/20)
+        padding (14rem/20)
         box-sizing border-box
         text-align: center
         .badge
@@ -287,39 +287,39 @@
           right 0
           background: rgb(240,20,20);
           color: white;
-          width 44px
-          height 36px
-          line-height: 36px;
-          font-size: 30px;
-          box-shadow: 0px 6px 10px 0px rgba(0,0,0,0.4);
-          font-weight: 700;
-          border-radius: 16px;
+          width (44rem/20)
+          height (36rem/20)
+          line-height: (36rem/20)
+          font-size: (30rem/20)
+          box-shadow: 0px (6rem/20) (10rem/20) 0 rgba(0,0,0,0.4)
+          font-weight: 700
+          border-radius: (16rem/20)
           text-align center
         .logo
           width 100%
           height 100%
           background: #2b343c
           border-radius: 50%
-          font-size: 84px
+          font-size: (84rem/20)
           color: #80858a
-          line-height: 160px
+          line-height: (160rem/20)
           font-weight: 700
           &.active
             background: #3190e8;
             color: white;
       .cart-empty
         display: inline-block
-        margin-top: 46px
+        margin-top: (46rem/20)
         vertical-align: top
-        font-size: 38px
+        font-size: (38rem/20)
         color: #a2a2a3
       .price-info
         display inline-block
         .price
           // display inline-block
           // vertical-align top
-          font-size 50px
-          margin-top 18px
+          font-size (50rem/20)
+          margin-top (18rem/20)
           box-sizing border-box
           color rgba(255,255,255,1)
           font-weight 700
@@ -329,17 +329,17 @@
           position relative
           display inline-block
           vertical-align top
-          margin 8px 0 0 12px
-          font-size 28px
+          margin (8rem/20) 0 0 (12rem/20)
+          font-size (28rem/20)
           color #fff
-          line-height 24px
+          line-height (24rem/20)
     .content-right
-      flex 0 0 315px
-      font-size 46px
+      flex 0 0 (315rem/20)
+      font-size (46rem/20)
       font-weight 700
       background #2b343c
       color rgba(255,255,255,0.4)
-      line-height 144px
+      line-height (144rem/20)
       text-align center
       &.enough
         background #00b43c
@@ -347,23 +347,23 @@
   .ball-container
     .ball
       position fixed
-      left 123px
-      bottom 91px
-      width 80px
-      height 80px
+      left (123rem/20)
+      bottom (91rem/20)
+      width (80rem/20)
+      height (80rem/20)
       z-index 200
       &.drop-enter,&.drop-enter-active
         transition all .4s linear
         .inner
-          width 60px
-          height 60px
+          width (60rem/20)
+          height (60rem/20)
           border-radius 50%
           background rgb(0,160,220)
           transition all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
   .shopcart-list
     position absolute
     z-index 10
-    bottom 144px
+    bottom (144rem/20)
     left 0
     width 100%
     background white
@@ -372,57 +372,57 @@
       transform: translate3d(0, 100%, 0)
     }
     .list-header
-      height 120px
+      height (120rem/20)
       background #ececee
       .title
         display inline-block
         vertical-align top
-        margin-top 33px
-        font-size 46px
+        margin-top (33rem/20)
+        font-size (46rem/20)
         font-weight 700
         color #666666
-        margin-left 60px
-        padding-left 24px
-        border-left 9px solid #0096ff
+        margin-left (60rem/20)
+        padding-left (24rem/20)
+        border-left (9rem/20) solid #0096ff
       .empty
         position absolute
-        right 8px
-        top 30px
-        font-size 40px
+        right (8rem/20)
+        top (30rem/20)
+        font-size (40rem/20)
         color #666666
-        padding 0 75px
+        padding 0 (75rem/20)
     .list-content
-      max-height 700px
+      max-height (700rem/20)
       overflow hidden
       .food
         position relative
-        height 160px
-        padding 0 60px
-        border-bottom 1px solid rgba(7,17,27,0.1)
+        height (160rem/20)
+        padding 0 (60rem/20)
+        border-bottom (1rem/20) solid rgba(7,17,27,0.1)
         overflow hidden
         .name
           float: left
-          font-size 48px
+          font-size (48rem/20)
           color #000000
-          line-height 162px
+          line-height (162rem/20)
           font-weight 700
         .price
           float: right
-          font-size 52px
+          font-size (52rem/20)
           font-weight 700
           color #ff6000
-          padding 0 32px 0 38px
-          line-height 160px
+          padding 0 (32rem/20) 0 (38rem/20)
+          line-height (160rem/20)
           .hlight
-            font-size 42px
-            margin-right -20px
+            font-size (42rem/20)
+            margin-right -(20rem/20)
         .cartcontrol-wrapper
           float: right
-          font-size 70px
-          margin-top 25px
+          font-size (70rem/20)
+          margin-top (25rem/20)
 .backdrop
   position fixed
-  top -540px
+  top -(540rem/20)
   bottom 0
   left 0
   right 0

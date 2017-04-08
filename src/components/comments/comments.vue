@@ -72,45 +72,45 @@
         background: #fff
         .star-wrapper
             display: flex
-            padding-top: 36px
-            padding-bottom: 23px
-            border-bottom: 1px solid #eeeeee
+            padding-top: (36rem/20)
+            padding-bottom: (23rem/20)
+            border-bottom: (1rem/20) solid #eeeeee
             .summary
-                width: 436px
+                width: (436rem/20)
                 text-align: center
                 .score
-                    font-size: 60px
+                    font-size: (60rem/20)
                     font-weight: 700
-                    line-height: 80px
+                    line-height: (80rem/20)
                 .desc
-                    font-size: 32px
-                    line-height: 58px
+                    font-size: (32rem/20)
+                    line-height: (58rem/20)
                     color: #696969
                 .compare
-                    font-size: 32px
-                    line-height: 58px
+                    font-size: (32rem/20)
+                    line-height: (58rem/20)
                     color: #999999
             .detail
                 flex: 1
-                height: 162px
-                padding-left: 158px
-                border-left: 1px solid #e6e6e6
+                height: (162rem/20)
+                padding-left: (158rem/20)
+                border-left: (1rem/20) solid #e6e6e6
                 .dist
                     font-size: 0
-                    padding-bottom: 24px
+                    padding-bottom: (24rem/20)
                     .desc
                         display: inline-block
-                        margin-right: 60px
-                        font-size: 34px
+                        margin-right: (60rem/20)
+                        font-size: (34rem/20)
                         color: #666666
                     .score
-                        font-size: 34px
-                        margin-left: 60px
+                        font-size: (34rem/20)
+                        margin-left: (60rem/20)
                 .delivery-time
-                    font-size: 32px
+                    font-size: (32rem/20)
                     .title
                         color: #666666
-                        margin-right: 60px
+                        margin-right: (60rem/20)
                     .time
                         color: #999999
                     

@@ -101,38 +101,38 @@
 <style lang="stylus"></style>
 <style lang="stylus" scoped >
     .rating-list
-        padding: 0 60px
+        padding: 0 (60rem/20) 
         background: #fff
         .rating-item
             width: 100%
-            border-bottom: 1px solid #f5f5f5
+            border-bottom: (1rem/20) solid #f5f5f5
             display: flex
-            padding: 40px 0
+            padding: (40rem/20) 0
             .avatar-wrap
-                width: 102px
-                padding-top: 4px
-                margin-right: 50px
+                width: (102rem/20)
+                padding-top: (4rem/20)
+                margin-right: (50rem/20)
                 img
-                    width: 120px
-                    height: 120px
+                    width: (120rem/20)
+                    height: (120rem/20)
                     border-radius: 50%
             .rating-info
                 flex: 1
                 .head
                     display: flex
                     justify-content: space-between
-                    height: 48px
-                    line-height: 48px
+                    height: (48rem/20)
+                    line-height: (48rem/20)
                     color: #999999
-                    font-size: 36px
-                    margin-bottom: 12px
+                    font-size: (36rem/20)
+                    margin-bottom: (12rem/20)
                 .rating-content
-                    font-size: 42px
-                    line-height: 58px
+                    font-size: (42rem/20)
+                    line-height: (58rem/20)
                     display: flex
                     flex-wrap: wrap
                     .icon-wrap
-                        margin-right: 16px
+                        margin-right: (16rem/20)
                         .icon-thumb_up
                             color: #ff6000
                         .icon-thumb_down
@@ -140,18 +140,18 @@
                     .text
                         flex: 1
                 .ratings-tags
-                    margin-top: 35px
+                    margin-top: (35rem/20)
                     .icon-thumb_up
-                        font-size: 44px
+                        font-size: (44rem/20)
                         color: #ff6000
                     .tags
                         display: inline-block
-                        padding: 0 16px
-                        margin-right: 10px
-                        font-size: 34px
-                        line-height: 64px
-                        border: 1px solid #dddddd
-                        border-radius: 8px
+                        padding: 0 (16rem/20)
+                        margin-right: (10rem/20)
+                        font-size: (34rem/20)
+                        line-height: (64rem/20)
+                        border: (1rem/20) solid #dddddd
+                        border-radius: (8rem/20)
                         color: #999999
                         
                 

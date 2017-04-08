@@ -71,9 +71,10 @@ export default {
             //如果值是null 在子组件用的时候就会报错
             seller: {},
             resInfo: {},
-            eventHub: eventHub,
             isBlur: false,
             isShowMask: false,
+            isShowSellerDetail: false,
+            isShowComDetail:false,
             shopCart: {},
             scrollOpts: {
                 scrollX: true,
@@ -82,12 +83,9 @@ export default {
             },
             scroll: {},
             screenX: 0,
-            isShowSellerDetail: false,
-            isShowComDetail:false,
             commentsObj: {
                 directionLockThreshold: 1
             }
-            
         }
     },
     created(){
@@ -221,7 +219,6 @@ export default {
 </script>
 
 <style lang="stylus">
-    //根组件中加入依赖树
     @import 'common/stylus/index'
     body, html
         position: relative
@@ -236,71 +233,70 @@ export default {
             width: 100%
             height: 100%
     .eleme-nav 
-        display: flex;
+        display: flex
         flex-direction: row
         border-bottom: 1px solid #eeeeee
         .nav-item-wrap
             display: block
-            width:50%
-            height:120px
+            width: 50%
+            height: (120rem/20)
             text-align: center
-            font-size: 42px
-            line-height: 120px
+            font-size: (42rem/20)
+            line-height: (120rem/20)
             a
                 display: inline-block
                 color: #333333
         .line
             position: absolute
-            left: 267px
-            top: 95px
-            width: 86px
-            height: 6px
+            left: (267rem/20)
+            top: (95rem/20)
+            width: (86rem/20)
+            height: (6rem/20)
             background : #0096ff
-            // transform: translateX(621px) scaleX(2)
-            border-radius: 4px
-     .eleme-bd
+            border-radius: (4rem/20)
+    .eleme-bd
         position: absolute
         width: 100%
-        top: 420px
+        top: (420rem/20)
         bottom: 0
         .content-wrap
             position: absolute
             width: 100%
-            top: 121px
+            top: (121rem/20)
             bottom: 0
             .content
                 position: absolute
                 width: 200%
                 height: 100%
-     .mask
-            position: absolute
-            left: 0
-            top: 0
-            width: 100%
-            height: 100%
-            background: rgba(7,17,27,0.5)
-            filter: blur(10px)
-            transition: .3s linear
-            &.mask-enter, &.mask-leave-active
-                opacity: 0
-      .seller-detail
-            transition: .3s linear
-            &.seller-detail-enter, &.seller-detail-leave-active
-                transform: translate3d(100%, 0, 0)
-      .comments-detail
-            transition: .3s linear
-            &.comments-detail-enter, &.comments-detail-leave-active
-                transform: translate3d(100%, 0, 0)
-      .app-comments-wrapper
-            float: left
-            overflow: hidden
-            height: 100%
-            width: 50%
-            padding-bottom: 144px
-            box-sizing: border-box
-            background: #f5f5f5
-       .cart-enter, cart-leave-active
-            transition: .5s linear
-            transform: translate3d(0, 100%, 0)
+    .mask
+        position: absolute
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        background: rgba(7,17,27,0.5)
+        filter: blur(10px)
+        transition: .3s linear
+        &.mask-enter, &.mask-leave-active
+            opacity: 0
+    .seller-detail
+        transition: .3s linear
+        &.seller-detail-enter, &.seller-detail-leave-active
+            transform: translate3d(100%, 0, 0)
+    .comments-detail
+        transition: .3s linear
+        &.comments-detail-enter, &.comments-detail-leave-active
+            transform: translate3d(100%, 0, 0)
+    .app-comments-wrapper
+        float: left
+        overflow: hidden
+        height: 100%
+        width: 50%
+        padding-bottom: (144rem/20)
+        box-sizing: border-box
+        background: #f5f5f5
+    .cart-enter, cart-leave-active
+        transition: .5s linear
+        transform: translate3d(0, 100%, 0)
        
 </style>

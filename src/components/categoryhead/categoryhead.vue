@@ -19,20 +19,20 @@
 <style lang="stylus">
     .category-head
         position: relative
-        height: 138px
+        height: (138rem/20)
         width: 100%
-        line-height: 138px
+        line-height: (138rem/20)
         background: #0398ff
         .return-wrap
             position: absolute
             left: 0
             top: 0
-            padding: 0 45px
-            font-size: 62px
+            padding: 0 (45rem/20)
+            font-size: (62rem/20)
             color: #fff
         .title
             text-align: center
-            font-size: 56px
+            font-size: (56rem/20)
             font-weight: 700
             color: #fff
 </style>
