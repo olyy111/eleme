@@ -86,9 +86,6 @@ Vue.directive('scroll', {
       el.scroll = null
     }
 })
-
-
-
 var eventHub = new Vue()
 new Vue({
   router,

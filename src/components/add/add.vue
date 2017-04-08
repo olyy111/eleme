@@ -65,7 +65,7 @@
             .reduce
                 transform: rotate(0)
                 transition: all .3s ease
-        .slide-enter, .slide-leave-active 
+        .slide-enter, .slide-leave-active
             transform: translate3d((130rem/20), 0, 0)
             .reduce
                 transform: rotate(180deg)
