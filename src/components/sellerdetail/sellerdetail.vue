@@ -1,7 +1,6 @@
 <template>
-    <div class="seller-detail" v-scroll>
+    <div class="seller-detail"  v-scroll="{opts: scrollObj}">
         <div class="seller-detail-inner">
-            
             <div class="seller-head">
                 <div class="seller-profile">
                     <div class="seller-avatar-wrap">
@@ -108,7 +107,22 @@
                 }
             }
         },
+        data(){
+            return {
+                scrollObj: {
+                    bounce: false
+                }
+            }
+        },
+        created(){
+            
+        },
+        updated(){
+        },
         methods: {
+            scroll(scroll){
+                this.scroll = scroll
+            },
             sureClass(typeNum){
                 var rsClass = ''
                 switch (typeNum) {
@@ -174,7 +188,6 @@
         .seller-detail-inner
             position: absolute
             width: 100%
-            height: 4000px
             padding-top: 138px
             padding-bottom: 144px
             left: 0
@@ -268,8 +281,6 @@
                 vertical-align: top
                 margin-top: 26px
                 font-size: 80px
-            
-
     .seller-service
         padding-left: 60px
         padding-bottom: 20px

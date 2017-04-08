@@ -38,7 +38,6 @@
 </script>
 <style lang="stylus" scoped>
     .add-cart
-        
         display: flex
         align-items: center
         .reduce-wrapper
@@ -46,14 +45,15 @@
             .reduce
                 display: inline-block
                 padding: 20px
+                font-size: 80px
                 color: #3190e8
         .add-wrapper
             display: inline-block
             .plus
-                font-family: 'sell-icon'
                 display: inline-block
                 right: 0
                 color: #3190e8
+                font-size: 80px
                 padding: 20px
         .counter
             display: inline-block

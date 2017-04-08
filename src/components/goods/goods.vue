@@ -103,11 +103,13 @@
                 foodsOpts: {
                     click: true,
                     probeType: 3,
-                    bounce: false
+                    bounce: false,
+                    directionLockThreshold: 1
                 },
                 sideOpts: {
                     click: true,
-                    probeType: 3
+                    probeType: 3,
+                    directionLockThreshold: 1
                 },
                 sideNotMove: false //如果是点击sidebar的区块， 不会自动校正位置
             }
@@ -173,7 +175,6 @@
             showFood(params){
                 this.isFoodShow = true
                 this.$root.eventHub.$emit('foodEv', params.event.target, params.food)
-                this.$emit('appblur')
             },
             notFoodShow(ev){
                 this.isFoodShow = false
@@ -204,6 +205,7 @@
 </script>
 <style lang="stylus">
     .goods
+        position: relative
         height: 100%
         width: 50%
         float: left

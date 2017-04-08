@@ -74,7 +74,6 @@ Vue.directive('scroll', {
       if(binding.value&&({}.toString.call(binding.value.method) === "[object Function]")){
           method = binding.value.method
           method.call(vnode.context, el.scroll)
-          
       }
     },
     update(el){

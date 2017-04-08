@@ -1,82 +1,83 @@
 <template lang="html">
-  <div class="shop-cart-wrapper">
-    <div class="shopCart">
-      <div class="content">
-        <div class="content-left"  @touchstart="toggleList">
-          <div class="logo-wrapper">
-            <div class="badge" v-if="totalPrice !== 0">
-              {{foodsNum}}
+    <div class="shop-cart-wrapper">
+      <div class="shopCart">
+        <div class="cart-content">
+          <div class="content-left"  @touchstart="toggleList">
+            <div class="logo-wrapper">
+              <div class="badge" v-if="totalPrice !== 0">
+                {{foodsNum}}
+              </div>
+              <div class="logo" :class="{active: totalPrice>0}">
+                <i class="icon-shopping_cart"></i>
+              </div>
             </div>
-            <div class="logo" :class="{active: totalPrice>0}">
-              <i class="icon-shopping_cart"></i>
+            <div class="cart-empty" v-if="totalPrice === 0">
+              购物车为空
+            </div>
+            <div class="price-info" v-else>
+              <div class="price"  >
+                ￥{{totalPrice}}
+              </div>
+              <div class="desc">
+                另需配送费{{this.resInfo.seller.deliveryPrice}}元
+              </div>
             </div>
           </div>
-          <div class="cart-empty" v-if="totalPrice === 0">
-            购物车为空
-          </div>
-          <div class="price-info" v-else>
-            <div class="price"  >
-              ￥{{totalPrice}}
-            </div>
-            <div class="desc">
-              另需配送费{{this.resInfo.seller.deliveryPrice}}元
-            </div>
-          </div>
-        </div>
-        <div class="content-right" 
-          :class="{enough:totalPrice>(resInfo.seller&&resInfo.seller.minPrice)}"
-        >
-          {{shipfeeTips}}           
-        </div>
-      </div>
-      <div class="ball-container">
-      
-          <transition name="drop" v-for="ball in balls" 
-            @before-enter="beforeEnter"
-            @enter="enter"
-            @after-enter="afterEnter"
+          <div class="content-right" 
+            :class="{enough:totalPrice>(resInfo.seller&&resInfo.seller.minPrice)}"
           >
-            <div class="ball" v-show="ball.show">
-              <div class="inner inner-hook"></div>
-            </div>
-          </transition>
-        
-      </div>
-      <transition name="fold">
-        <div class="shopcart-list" v-show="isFold">
-          <div class="list-header">
-            <h1 class="title">购物车</h1>
-            <span class="empty" v-tap="{methods: clear}">清空</span>
-          </div>
-          <div class="list-content" ref="shopCartList" v-scroll>
-              <transition-group
-                name="cartList"
-                @before-leave="beforeLeave"
-                @leave="leave"
-                @after-leave="afterLeave"
-                tag="ul"
-              >
-                <li class="food" v-for="food in selectedFoods" :key="food">
-                  <span class="name">{{food.name}}</span>
-                  <div class="price">
-                    <span class="hlight">￥</span>
-                    <span>{{food.price}}</span>
-                  </div>
-                  <div class="cartcontrol-wrapper">
-                    <add-cart :food="food"></add-cart>
-                  </div>
-                </li>
-              </transition-group>
+            {{shipfeeTips}}           
           </div>
         </div>
+        <div class="ball-container">
+        
+            <transition name="drop" v-for="ball in balls" 
+              @before-enter="beforeEnter"
+              @enter="enter"
+              @after-enter="afterEnter"
+            >
+              <div class="ball" v-show="ball.show">
+                <div class="inner inner-hook"></div>
+              </div>
+            </transition>
+          
+        </div>
+        <transition name="fold">
+          <div class="shopcart-list" v-show="isFold">
+            <div class="list-header">
+              <h1 class="title">购物车</h1>
+              <span class="empty" v-tap="{methods: clear}">清空</span>
+            </div>
+            <div class="list-content" ref="shopCartList" v-scroll>
+                <transition-group
+                  name="cartList"
+                  @before-leave="beforeLeave"
+                  @leave="leave"
+                  @after-leave="afterLeave"
+                  tag="ul"
+                >
+                  <li class="food" v-for="food in selectedFoods" :key="food">
+                    <span class="name">{{food.name}}</span>
+                    <div class="cartcontrol-wrapper">
+                      <add-cart :food="food"></add-cart>
+                    </div>
+                    <div class="price">
+                      <span class="hlight">￥</span>
+                      <span>{{food.price}}</span>
+                    </div>
+                  </li>
+                </transition-group>
+            </div>
+          </div>
+        </transition>
+      </div>
+      <transition name="backdrop">
+        <div class="backdrop" v-show="isFold" @touchstart="toggleBackdrop"></div>
       </transition>
-    </div>
-    <transition name="backdrop">
-      <div class="backdrop" v-show="isFold" @touchstart="toggleBackdrop"></div>
-    </transition>
+      
     
+    </div>
   
-  </div>
 </template>
 
 <script>
@@ -252,13 +253,13 @@
   z-index: 50;
   left: 0;
   bottom: 0;
-  width: 100%;
+  width: 1242px;
   height: 144px;
 .shopCart
   position relative
   z-index 50
   height 100%
-  .content
+  .cart-content
     position relative
     z-index 30
     display flex
@@ -308,6 +309,8 @@
             color: white;
       .cart-empty
         display: inline-block
+        margin-top: 46px
+        vertical-align: top
         font-size: 38px
         color: #a2a2a3
       .price-info
@@ -352,8 +355,8 @@
       &.drop-enter,&.drop-enter-active
         transition all .4s linear
         .inner
-          width 40px
-          height 40px
+          width 60px
+          height 60px
           border-radius 50%
           background rgb(0,160,220)
           transition all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
@@ -373,6 +376,8 @@
       background #ececee
       .title
         display inline-block
+        vertical-align top
+        margin-top 33px
         font-size 46px
         font-weight 700
         color #666666
@@ -391,18 +396,18 @@
       overflow hidden
       .food
         position relative
-        display flex
         height 160px
         padding 0 60px
         border-bottom 1px solid rgba(7,17,27,0.1)
         overflow hidden
         .name
-          flex 6
+          float: left
           font-size 48px
           color #000000
           line-height 162px
           font-weight 700
         .price
+          float: right
           font-size 52px
           font-weight 700
           color #ff6000
@@ -412,12 +417,12 @@
             font-size 42px
             margin-right -20px
         .cartcontrol-wrapper
-          flex: 2.2
+          float: right
           font-size 70px
           margin-top 25px
 .backdrop
   position fixed
-  top 0
+  top -540px
   bottom 0
   left 0
   right 0

@@ -13,12 +13,12 @@
                 meta = document.head.querySelector('meta')
 
             viewportEl.name = "viewport";
-            // viewportEl.content = "width=device-width, initial-scale="+ scale +", maximum-scale="+ scale +", minimum-scale="+ scale +", user-scalable=no";
-            viewportEl.content = "width=1242"
+            viewportEl.content = "width=device-width, initial-scale="+ scale +", maximum-scale="+ scale +", minimum-scale="+ scale +", user-scalable=no";
+            // viewportEl.content = "width=1242"
             document.head.insertBefore(viewportEl, meta);
 
             var h = window.innerWidth;
-            document.documentElement.style.fontSize = h/15 + 'px';
+            document.documentElement.style.fontSize = h/62.1 + 'px';
         })
     //  阻止浏览器默认行为
         document.addEventListener('touchstart',function (ev){

@@ -17,17 +17,17 @@
             <section class="content-wrap" v-scroll="{method:scrollFn, opts:scrollOpts}">
                 <section class="content"  ref="scrollWrap">
                     <eleme-goods :resInfo="resInfo" ref="goods"></eleme-goods>
-                    <div class="app-comments-wrapper" v-scroll>
+                    <div class="app-comments-wrapper" v-scroll="{opts: commentsObj}">
                         <eleme-comments :resInfo="resInfo" ref="comments"></eleme-comments>
                     </div>
                 </section>
             </section>
         </section>
     </section>
-    <food :is-show-detail="isBlur" @appblur="blur"></food>
+    <food :is-show-detail="isBlur" @appblur="blur" :resInfo="resInfo"></food>
     <transition name="seller-detail">
         <seller-detail 
-            v-show="isShowSellerDetail" 
+            v-if="isShowSellerDetail" 
             :seller="resInfo.seller"
             :ratings="resInfo.ratings"
             @return-back="returnBack"
@@ -41,7 +41,6 @@
             @from-comments="hideComments">
         </comments-detail>
     </transition>
-    <shop-cart :resInfo="resInfo" :shop-cart="shopCart"></shop-cart>
     <transition name="mask" >
         <div class="mask" 
             v-show="isShowMask"
@@ -84,7 +83,11 @@ export default {
             scroll: {},
             screenX: 0,
             isShowSellerDetail: false,
-            isShowComDetail:false
+            isShowComDetail:false,
+            commentsObj: {
+                directionLockThreshold: 1
+            }
+            
         }
     },
     created(){
@@ -135,10 +138,9 @@ export default {
             var lineArea = screenX/2
             var lineEnd = 2
             var scrollArea = screenX
-            var moveflag = false
-            var endCount = 0
+            var firstMove = 0
+            var num = 0
             scroll.on('scrollStart', (pos) => {
-                moveflag = true
                 oriX = this.$refs.scrollWrap.getBoundingClientRect().left
                 oriTime = +new Date()
             })
@@ -146,11 +148,6 @@ export default {
                 line.style.transform = "translateX("+ Math.abs(pos.x)/2 +"px) scaleX("+ (Math.abs(pos.x)/screenX + 1) +")"    
             })
             scroll.on('scrollEnd', () => {
-                endCount ++
-                if(endCount === 2){
-                    endCount = 0
-                    return
-                }
                 var endX = this.$refs.scrollWrap.getBoundingClientRect().left
                 var endTime = +new Date()
                 var speed = Math.abs(endX - oriX)/(endTime - oriTime)
@@ -170,7 +167,7 @@ export default {
                     }
                     return
                 }else {
-                    
+                    // if(-endX === screen && -endX === 0) return
                     if(-endX < screenX/2){
                         Velocity(line, {
                             translateX: 0,
@@ -186,7 +183,7 @@ export default {
                     }
                 }
                 
-                moveflag = false
+                
             })
         },
         blur(){
@@ -229,6 +226,7 @@ export default {
     body, html
         position: relative
         height: 100%
+        width: 100%
         overflow: hidden
         font-family: Helvetica 
     #app
@@ -301,4 +299,8 @@ export default {
             padding-bottom: 144px
             box-sizing: border-box
             background: #f5f5f5
+       .cart-enter, cart-leave-active
+            transition: .5s linear
+            transform: translate3d(0, 100%, 0)
+       
 </style>
