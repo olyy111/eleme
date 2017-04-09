@@ -1,5 +1,5 @@
 <template>
-    <section class="comments-detail" v-scroll>
+    <section class="comments-detail" v-scroll="{method: _scroll}">
         <comments :resInfo="resInfo" class="ratings-wrapper"></comments>
         <div class="category-head-wrapper">
             <category-head  @close="returnToSeller" head-desc="评价"></category-head>
@@ -19,6 +19,11 @@
            }
        },
        methods: {
+           _scroll(scroll){
+               this.$root.eventHub.$on('refreshScroll', () => {
+                   scroll.refresh()
+               })
+           },
            returnToSeller (){
                this.$emit('from-comments')
            }

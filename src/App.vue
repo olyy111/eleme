@@ -17,7 +17,7 @@
             <section class="content-wrap" v-scroll="{method:scrollFn, opts:scrollOpts}">
                 <section class="content"  ref="scrollWrap">
                     <eleme-goods :resInfo="resInfo" ref="goods"></eleme-goods>
-                    <div class="app-comments-wrapper" v-scroll="{opts: commentsObj}">
+                    <div class="app-comments-wrapper" v-scroll="{opts: commentsObj, method:commentScroll}">
                         <eleme-comments :resInfo="resInfo" ref="comments"></eleme-comments>
                     </div>
                 </section>
@@ -36,7 +36,7 @@
     </transition>
     <transition name="comments-detail">
         <comments-detail 
-            v-show="isShowComDetail" 
+            v-if="isShowComDetail" 
             :resInfo="resInfo"
             @from-comments="hideComments">
         </comments-detail>
@@ -59,7 +59,6 @@ import comments from "./components/comments/comments"
 import commentsdetail from "./components/comments/commentsdetail"
 import shopcart from "./components/shopcart/shopcart"
 import sellerdetail from "./components/sellerdetail/sellerdetail"
-import BScroll from "better-scroll"
 import food from "./components/food/food"
 import Velocity from "velocity-animate"
 var eventHub = new Vue();
@@ -97,8 +96,9 @@ export default {
         }).catch( (err) => {
             console.log(err)
         } )
-        this.screenX = window.screen.width*3
-        
+
+        //viewport在meta标签缩放后在js里无法准确获得，手动计算
+        this.screenX = window.screen.width*window.devicePixelRatio
     },
     methods: {
         hideComments(){
@@ -127,6 +127,11 @@ export default {
             }, 200)
             this.scroll.scrollTo(0, 0, 300)
         },
+        commentScroll(scroll){
+            this.$root.eventHub.$on('refreshScroll', () => {
+                scroll.refresh()
+            })
+        },
         scrollFn(scroll){
             this.scroll = scroll
             var screenX = this.screenX
@@ -147,6 +152,9 @@ export default {
             })
             scroll.on('scrollEnd', () => {
                 var endX = this.$refs.scrollWrap.getBoundingClientRect().left
+                if(endX === 0 || endX === screenX){
+                    return
+                }
                 var endTime = +new Date()
                 var speed = Math.abs(endX - oriX)/(endTime - oriTime)
                 if(speed > 2){
@@ -165,7 +173,6 @@ export default {
                     }
                     return
                 }else {
-                    // if(-endX === screen && -endX === 0) return
                     if(-endX < screenX/2){
                         Velocity(line, {
                             translateX: 0,

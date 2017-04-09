@@ -75,9 +75,13 @@ Vue.directive('scroll', {
           method = binding.value.method
           method.call(vnode.context, el.scroll)
       }
+      console.log(el.className)
+      console.log("创建")
     },
     update(el){
       setTimeout(() => {
+          console.log(el.className)
+          console.log("上面是更新")
           el.scroll.refresh()
       },0)
     },

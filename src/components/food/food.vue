@@ -80,13 +80,12 @@
 </template>
 <script>
     import addCart from '../add/add'
-    import Velocity from 'velocity-animate'
-    import {mapState} from 'vuex'
     import ratings from '../ratings/ratings'
-    import BScroll from "better-scroll"
     import categoryhead from "../categoryhead/categoryhead"
     import categorycomments from "../categorycomments/categorycomments"
     import shopcart from '../shopcart/shopcart'
+    import Velocity from 'velocity-animate'
+    import {mapState} from 'vuex'
     export default {
         props:{
             isShowDetail: {
@@ -158,7 +157,7 @@
         },
         methods: {
             _add(){
-
+                //声明一个空函数，在dom渲染完毕后会替换
             },
             showComments(){
                 this.isShowComments = true
@@ -177,7 +176,6 @@
                         }
                         this.isShowCart= false
                         this.isShowContent = false
-                        console.log(this.scroll)
                          Velocity(this.$refs.food, {
                             width: this.targetEl.width,
                             height: this.targetEl.height,
@@ -217,9 +215,9 @@
             },
             before(el){
                 //获取目标盒模型信息
-                var tarEl = this.$refs.food
-                el.style.display = "block" //否则无法获取实际盒模型信息
-                var rc = tarEl.getBoundingClientRect()  
+                el.style.display = "block"
+                var rc = el.getBoundingClientRect()
+                console.log(rc)
                 this.targetEl.left = rc.left
                 this.targetEl.top= rc.top
                 this.targetEl.width= rc.width
@@ -232,16 +230,13 @@
                 el.style.top = this.clickedEl.top + "px"
                 el.style.left = this.clickedEl.left + "px"
                 this.showInfo = false
-                
             },
             enter(el, done){
                 Velocity(el, {
                     width: this.targetEl.width,
                     height: this.targetEl.height,
                     top: this.targetEl.top,
-                    left: this.targetEl.left,
-                    "margin-top": 0,
-                    "margin-left": 0
+                    left: this.targetEl.left
                 }, {
                     duration: 300,
                     complete: done
@@ -255,7 +250,11 @@
                 img.onload = () => {
                     this.$refs.imgWrap.style["background-image"] = "url("+ img.src +")"
                 }  
+
+                //在获得位置后，改弹性盒模型属性为`block`
                 this.$refs.wrapper.style.display = "block"
+
+                //此时取消要滚动元素的高度限制，使其被内容滚动，才能滚动
                 this.$refs.wrapper.style.height = "auto"
             },
             leave(el, done){
@@ -271,8 +270,8 @@
         computed:{
             ...mapState(['products']),
             foodNum(){
-                var num = 0
-                var products = this.$store.state.products
+                var num = 0,
+                    products = this.$store.state.products
                 products.forEach( food => {
                     if(food === this.food){
                         num = food.count

@@ -56,10 +56,18 @@
         methods: {
             toggleContent(){
                 this.isOnlyContentShow = !this.isOnlyContentShow
+
+                //当DOM更新完毕，通知引用此组件的可滚动组件重新计算高度
+                his.$nextTick( () => {
+                    this.$root.eventHub.$emit('refreshScroll')
+                })
                 this.$root.eventHub.$emit('selectTag', this.isOnlyContentShow)
             },
             selectTag(params){
                 this.currentType = params.type
+                this.$nextTick( () => {
+                    this.$root.eventHub.$emit('refreshScroll')
+                })
                 this.$root.eventHub.$emit('selectTag', params.type)
             }
         }

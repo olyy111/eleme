@@ -18,7 +18,7 @@
         </div>
         <div class="foods-wrapper" ref="foodsWrapper" v-scroll="{method: foodsScrollEv,opts:foodsOpts}">
             <div class="foods">
-                <div class="category-foods" v-for="item in goods">
+                <div class="category-foods" v-for="item in resInfo.goods">
                     <div class="kind-top">
                         <h5 class="kind-title">{{item.name}}</h5> 
                         <!--<span class="kind-title-text">大家喜欢吃在叫真好吃</span>-->
@@ -70,19 +70,16 @@
     import food from '../food/food'
     export default {
         props: {
-            resInfo: Object
+            resInfo: {
+                type: Object,
+                default(){
+                    return {}
+                }
+            }
         },
-        created() {
-
-            //渲染dom完毕获取各区块的盒模型数值用作动画
-            this.$nextTick(() => {
-                axios.get('static/data.json').then((res) => {
-                    this.$nextTick(() => {
-                        this.getSegTop()
-                        this.computedSideBarSize()
-                    })
-                });
-           })
+        updated(){
+            this.getSegTop()
+            this.computedSideBarSize()
         },
         data(){
             return {
@@ -111,23 +108,6 @@
                     probeType: 3,
                     directionLockThreshold: 1
                 }
-            }
-        },
-        computed: {
-            goods(){
-                return this.resInfo.goods
-            },
-            selectedFoods(){
-                var goods = this.resInfo.goods
-                var arr = []
-                goods.forEach( good => {
-                    good.foods.forEach( food => {
-                        if(food.count > 0){
-                            arr.push(food)
-                        }
-                    })
-                })
-                return arr
             }
         },
         components: {
@@ -201,6 +181,7 @@
                 var foods = document.getElementsByClassName("category-foods"),
                     len = foods.length,
                     top = 0
+                this.segTopArr = []
                 this.segTopArr.push(top)  
                 for(var i=0;i<len;i++){
                     top += foods[i].clientHeight
