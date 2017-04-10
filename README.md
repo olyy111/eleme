@@ -8,13 +8,10 @@
 * better-scroll
 
 ## 连接
-<center>
 [在线演示戳这里](http://139.129.240.16:9999/#/)
 手机演示戳这里
-![](https://raw.githubusercontent.com/olyy111/source/master/cadidate.png)
-</center>
+![手机演示戳这里](https://raw.githubusercontent.com/olyy111/source/master/cadidate.png)
 
-## 效果展示
 
 ## 安装
 
