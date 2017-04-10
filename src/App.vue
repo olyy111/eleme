@@ -24,7 +24,7 @@
             </section>
         </section>
     </section>
-    <food :is-show-detail="isBlur" @appblur="blur" :resInfo="resInfo"></food>
+    <food :is-show-detail="isBlur" @appblur="blur" @food-hidden="hideFood" :resInfo="resInfo"></food>
     <transition name="seller-detail">
         <seller-detail 
             v-if="isShowSellerDetail" 
@@ -190,6 +190,10 @@ export default {
                 
                 
             })
+        },
+        hideFood(){
+            this.isBlur = false
+            this.isShowMask = false  
         },
         blur(){
             this.isBlur = true

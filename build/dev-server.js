@@ -69,7 +69,7 @@ app.use(hotMiddleware)
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
 
-var uri = '192.168.1.101:' + port
+var uri = '172.17.175.9:' + port
 // 192.168.1.100
 devMiddleware.waitUntilValid(function () {
   console.log('> Listening at ' + uri + '\n')

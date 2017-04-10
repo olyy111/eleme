@@ -74,7 +74,14 @@
                     <ratings :ratings="food.ratings" class="border"></ratings>
                 </div>
             </transition>
-            
+            <transition name=""></transition>
+            <div class="returnToHomeWrapper" 
+                v-show="isShowBtn"
+                v-tap="{methods: returnToHome}">
+                <div class="returnToHome">
+                    <i class="icon icon-arrow_lift"></i>
+                </div>
+            </div>
         </div>
     </transition>
 </template>
@@ -107,6 +114,7 @@
                 isShowMask: false,
                 limitFlag: false,
                 isShowCart: false,
+                isShowBtn: false,
                 clickedEl: {
                     width: 0,
                     height: 0,
@@ -149,13 +157,24 @@
             })
             
             //在dom渲染之后，重新指向_add方法为 `add-cart`组件的add方法
-            //作为`添加购物车`按钮的点击处理函数
+            //作为`添加购物车`按钮的点击处理函数, 使得自定义指令获取事件对象
             this.$nextTick( () => {
-                console.log(this.$refs.cart)
                 this._add = this.$refs.cart.add
             })
         },
         methods: {
+            returnToHome(){
+                var el = this.$refs.food
+                this.isShowCart= false
+                this.isShowContent = false
+                this.isShowBtn = false
+                this.limitFlag = false
+                el.style.width = this.targetEl.width + "px",
+                el.style.height = this.targetEl.height + "px",
+                el.style.top = this.targetEl.top + "px",
+                el.style.left = this.targetEl.left + "px"
+                this.$emit('food-hidden')
+            },
             _add(){
                 //声明一个空函数，在dom渲染完毕后会替换
             },
@@ -176,6 +195,7 @@
                         }
                         this.isShowCart= false
                         this.isShowContent = false
+                        this.isShowBtn = false
                          Velocity(this.$refs.food, {
                             width: this.targetEl.width,
                             height: this.targetEl.height,
@@ -198,6 +218,7 @@
                 }
                 this.isShowMask = false
                 this.isShowContent = true
+                this.isShowBtn = true
                 var el = this.$refs.food
                 var foodDetailH = window.innerWidth
                 Velocity(el, {
@@ -217,7 +238,7 @@
                 //获取目标盒模型信息
                 el.style.display = "block"
                 var rc = el.getBoundingClientRect()
-                console.log(rc)
+                
                 this.targetEl.left = rc.left
                 this.targetEl.top= rc.top
                 this.targetEl.width= rc.width
@@ -453,4 +474,22 @@
         .cart-enter, .cart-leave-active
             transition: .5s linear
             transform: translate3d(0, 100%, 0)
+    .returnToHomeWrapper
+        position: absolute
+        z-index: 120
+        left: 0
+        top: 0
+        padding: 30px
+        .returnToHome
+            width: 85px
+            height: 85px
+            text-align: center
+            border-radius: 50%
+            background: rgba(0, 0, 0, .5)
+            .icon
+                display: inline-block
+                margin-left: -9px
+                line-height: 85px
+                font-size: 48px
+                color: #fff
 </style>

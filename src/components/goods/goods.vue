@@ -274,7 +274,6 @@
         .food-avatar-wrap
             width: (171rem/20)
             height: (171rem/20)
-            background: red
             margin-right: (30rem/20)
     .food-intro
         flex-shrink: 1

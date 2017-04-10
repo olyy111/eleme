@@ -1,8 +1,22 @@
-# eleme
+﻿# 饿了么新版外卖页
 
-> A Vue.js project
+## 技术栈
+* vue
+* vuex
+* vue-cli
+* axios
+* better-scroll
 
-## Build Setup
+## 连接
+<center>
+[在线演示戳这里](http://139.129.240.16:9999/#/)
+手机演示戳这里
+![](https://raw.githubusercontent.com/olyy111/source/master/cadidate.png)
+</center>
+
+## 效果展示
+
+## 安装
 
 ``` bash
 # install dependencies
@@ -18,4 +32,7 @@ npm run build
 npm run build --report
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+
+
+
