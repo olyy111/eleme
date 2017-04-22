@@ -6,9 +6,12 @@ import router from './router'
 import Vuex from 'vuex'
 import BScroll from 'better-scroll'
 import vueTap from 'v-tap';
+import vscroll from 'v-scroll'
+
 Vue.config.productionTip = false
 Vue.use(vueTap);
 Vue.use(Vuex)
+Vue.use(vscroll)
 var store = new Vuex.Store({
   state:{
     products: [],
@@ -56,36 +59,6 @@ var store = new Vuex.Store({
 
 })
 
-//滚动条指令
-Vue.directive('scroll', {
-    inserted(el, binding, vnode){
-      var method = null, 
-          opts = null
-      
-      if(binding.value&&({}.toString.call(binding.value.opts) === "[object Object]")){
-          opts = binding.value.opts
-      }
-
-      el.addEventListener('touchmove', function (ev){
-        ev.preventDefault()
-      })
-
-      el.scroll = new BScroll(el, opts)
-      if(binding.value&&({}.toString.call(binding.value.method) === "[object Function]")){
-          method = binding.value.method
-          method.call(vnode.context, el.scroll)
-      }
-    },
-    update(el){
-      setTimeout(() => {
-          el.scroll.refresh()
-      },0)
-    },
-    unbind(el){
-      el.scroll.destroy()
-      el.scroll = null
-    }
-})
 var eventHub = new Vue()
 new Vue({
   router,
